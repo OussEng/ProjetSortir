@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="portfolio-card card">
+            <div class="card-body text-center">
+                <h5 class="card-title">{{ user.getUsername() }}</h5>
+                <p class="card-text text-muted">{{ user.getFirstname() ~ ' ' ~ user.getLastname()}}</p>
+
+                <ul class="list-group list-group-flush mb-3">
+                    <li class="list-group-item"><i class="fas fa-envelope me-2"></i>{{ user.getEmail() }}</li>
+                    <li class="list-group-item"><i class="fas fa-phone me-2"></i>{{ user.getPhone() }}</li>
+                </ul>
+                <a href="{{ path('app_user_edit') }}" class="btn btn-primary">Modifier le profil</a>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+

@@ -2,23 +2,31 @@
 
 namespace App\Controller;
 
-use App\Entity\Site;
-use App\Repository\CityRepository;
+use App\Entity\Event;
+use App\Form\EventType;
 use App\Repository\EventRepository;
-use App\Repository\SiteRepository;
 use App\Service\EventService;
 use App\Service\SiteService;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/sorties', name: 'app_')]
+
+
+#[Route('/sortie', name: 'app_')]
 final class EventController extends AbstractController
 {
+
+
+
     public function __construct(
         private EventService $eventService,
-        private SiteService  $siteService)
+        private SiteService  $siteService,
+        private EntityManagerInterface $entityManager,
+    )
     {
     }
 
@@ -68,6 +76,34 @@ final class EventController extends AbstractController
         return $this->render('event/eventBySite.html.twig', [
             'eventsBySite' => $events,
             'sites' => $sites,
+        ]);
+    }
+
+    #[Route('/cree', name: 'create')]
+    public function create(Request $request): Response
+    {
+
+        $event = new Event();
+        $eventForm = $this->createForm(EventType::class, $event);
+        $eventForm->handleRequest($request);
+
+
+        if($eventForm-> isSubmitted() && $eventForm->isValid()){
+
+            $event = $eventForm->getData();
+            $event->setSite($this->getUser()->getSite());
+            $event->setOrganiser($this->getUser());
+
+
+            $this->entityManager->persist($event);
+            $this->entityManager->flush();
+            $this->addFlash('success', 'La sortie a été ajoutée avec succès');
+            return $this->redirectToRoute('app_events');
+
+        }
+
+        return $this->render('event/create.html.twig', [
+            'eventForm' => $eventForm,
         ]);
     }
 
