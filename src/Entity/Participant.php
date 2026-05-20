@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ParticipantRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
@@ -20,6 +21,10 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank(message: 'L’email est obligatoire.')]
+    #[Assert\Length(min: 1, max: 180,
+        minMessage: 'L’email doit contenir au moins 1 caractère.',
+        maxMessage: 'L’email doit contenir au moins 180 caractère.')]
     #[ORM\Column(length: 180)]
     private ?string $email = null;
 
@@ -32,21 +37,45 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var string The hashed password
      */
+    #[Assert\NotBlank(message: 'Le mot de passe est obligatoire.')]
+    #[Assert\Length(min: 4, max: 180,
+        minMessage: 'Le mot de passe doit contenir au moins 4 caractère.',
+        maxMessage: 'Le mot de passe doit contenir au moins 180 caractère.')]
     #[ORM\Column]
     private ?string $password = null;
 
+    #[Assert\NotBlank(message: 'Le nom d’utilisateur est obligatoire.')]
+    #[Assert\Length(min: 4, max: 50,
+        minMessage: 'Le nom d’utilisateur doit contenir au moins 4 caractères.',
+        maxMessage: 'Le nom d’utilisateur ne doit pas dépasser 50 caractères.'
+    )]
     #[ORM\Column(length: 50)]
     private ?string $username = null;
 
+    #[Assert\NotBlank(message: 'Le prénom est obligatoire.')]
+    #[Assert\Length(min: 4, max: 50,
+        minMessage: 'Le prénom doit contenir au moins 4 caractères.',
+        maxMessage: 'Le prénom ne doit pas dépasser 50 caractères.'
+    )]
     #[ORM\Column(length: 50)]
     private ?string $firstname = null;
 
+    #[Assert\NotBlank(message: 'Le nom est obligatoire.')]
+    #[Assert\Length(min: 4, max: 50,
+        minMessage: 'Le nom doit contenir au moins 4 caractères.',
+        maxMessage: 'Le nom ne doit pas dépasser 50 caractères.'
+    )]
     #[ORM\Column(length: 50)]
     private ?string $lastname = null;
 
     #[ORM\Column]
     private ?bool $active = null;
 
+    #[Assert\NotBlank(message: 'Le numéro de téléphone est obligatoire.')]
+    #[Assert\Length(min: 10, max: 20,
+        minMessage: 'Le numéro de téléphone doit contenir au moins 10 caractères.',
+        maxMessage: 'Le numéro de téléphone ne doit pas dépasser 20 caractères.'
+    )]
     #[ORM\Column(length: 20)]
     private ?string $phone = null;
 

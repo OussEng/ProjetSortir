@@ -1,18 +1,21 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div>
-        <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi consequatur deserunt error labore
-            laudantium magni maiores maxime molestias neque nisi, optio placeat porro provident reiciendis,
-            reprehenderit similique soluta ut veniam.
-        </div>
-        <div>Expedita illo incidunt, odit praesentium quis sint! Atque error, fugiat incidunt iure labore molestiae
-            neque, omnis porro, quam quasi rem similique velit voluptates. Autem expedita incidunt odio perferendis
-            praesentium tempore.
-        </div>
-        <div>Deleniti neque perferendis provident. Animi deleniti nostrum repudiandae vero? Ad ducimus et rem sit
-            veniam. Accusamus ex illo pariatur velit. Assumenda eaque id iure iusto maiores recusandae soluta ullam
-            unde?
+    <div class="container">
+        <div class="portfolio-card card">
+            <div class="card-body text-center">
+                <h5 class="card-title">{{ user.getUsername() }}</h5>
+                <p class="card-text text-muted">{{ user.getFirstname() ~ ' ' ~ user.getLastname()}}</p>
+
+                <ul class="list-group list-group-flush mb-3">
+                    <li class="list-group-item"><i class="fas fa-envelope me-2"></i>{{ user.getEmail() }}</li>
+                    <li class="list-group-item"><i class="fas fa-phone me-2"></i>{{ user.getPhone() }}</li>
+                </ul>
+                <a href="{{ path('app_user_edit') }}" class="btn btn-primary">Modifier le profil</a>
+            </div>
         </div>
     </div>
+
 {% endblock %}
+
+
