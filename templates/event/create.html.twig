@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-6">
+
+                <div class="card shadow border-0 rounded-4">
+                    <div class="card-body p-4 p-md-5 bg-light rounded-4">
+
+                        <div class="text-center mb-4">
+                            <h2 class="fw-bold text-success">
+                                🌿 Créer une sortie
+                            </h2>
+
+                            <p class="text-muted">
+                                Organisez votre prochaine aventure
+                            </p>
+                        </div>
+
+                        {{ form_start(eventForm) }}
+
+                        {{ form_widget(eventForm) }}
+
+                        <div class="d-grid mt-4">
+                            <button class="btn btn-success btn-lg rounded-3">
+                                🌱 Créer la sortie
+                            </button>
+                        </div>
+
+                        {{ form_end(eventForm) }}
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
