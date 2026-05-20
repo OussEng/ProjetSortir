@@ -27,7 +27,8 @@ final class EventController extends AbstractController
         $this->entityManager = $entityManager;
     }
 
-    #[Route('/cree', name: 'create')]
+
+    #[Route('/cree', name: 'app_create')]
     public function create(Request $request): Response
     {
 
