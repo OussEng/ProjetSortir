@@ -30,8 +30,7 @@ class Site
     #[ORM\OneToMany(targetEntity: Participant::class, mappedBy: 'site')]
     private Collection $participants;
 
-    public function __construct()
-    {
+    public function __construct(){
         $this->events = new ArrayCollection();
         $this->participants = new ArrayCollection();
     }
