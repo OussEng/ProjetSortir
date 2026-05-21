@@ -1,21 +1,250 @@
 {% extends 'base.html.twig' %}
 
-{% block body %}
-    <div class="container">
-        <div class="portfolio-card card">
-            <div class="card-body text-center">
-                <h5 class="card-title">{{ user.getUsername() }}</h5>
-                <p class="card-text text-muted">{{ user.getFirstname() ~ ' ' ~ user.getLastname()}}</p>
+{% block title %}Profil de {{ user.username }}{% endblock %}
 
-                <ul class="list-group list-group-flush mb-3">
-                    <li class="list-group-item"><i class="fas fa-envelope me-2"></i>{{ user.getEmail() }}</li>
-                    <li class="list-group-item"><i class="fas fa-phone me-2"></i>{{ user.getPhone() }}</li>
-                </ul>
-                <a href="{{ path('app_user_edit') }}" class="btn btn-primary">Modifier le profil</a>
+{% block body %}
+
+    {% set avatar = user is not null and user.getImg is not null
+        ? asset('img/profil/' ~ user.getImg)
+        : 'https://i.pravatar.cc/300?img=3' %}
+
+    <div class="container py-5 ">
+        <div class="mx-auto" style="max-width: 1200px;">
+            <div class="position-relative mb-5">
+
+                <div class="rounded-4 overflow-hidden shadow-sm"
+                     style="height: 320px;
+                         background: linear-gradient(135deg, #0f172a, #1e293b);">
+
+                    <div class="h-100 d-flex align-items-end p-5">
+
+                        <div class="d-flex align-items-end gap-4">
+
+                            <img src="{{ avatar }}"
+                                 alt="Profil {{ user.username }}"
+                                 class="rounded-circle border border-4 border-white shadow"
+                                 style="width: 150px;
+                                    height: 150px;
+                                    object-fit: cover;">
+
+                            <div class="text-white mb-3">
+                                <h1 class="fw-bold mb-1">
+                                    {{ user.username }}
+                                </h1>
+
+                                {% if user.firstname or user.lastname %}
+                                    <p class="mb-2 text-white-50 fs-5">
+                                        {{ user.firstname }} {{ user.lastname }}
+                                    </p>
+                                {% endif %}
+
+                                <div class="d-flex flex-wrap gap-2">
+                                    <span class="badge bg-light text-dark px-3 py-2 rounded-pill">
+                                        <i class="fas fa-map-marker-alt me-1"></i>
+                                        Paris, France
+                                    </span>
+
+                                    <span class="badge bg-primary px-3 py-2 rounded-pill">
+                                        <i class="fas fa-star me-1"></i>
+                                        Membre actif
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% if app.user == user %}
+                    <div class="position-absolute top-0 end-0 m-4">
+                        <a href="{{ path('app_user_edit') }}"
+                           class="btn btn-light rounded-pill px-4 fw-semibold shadow-sm">
+
+                            <i class="fas fa-pen me-2"></i>
+                            Modifier le profil
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="row g-4 mb-5">
+                <div class="col-md-6">
+                    <div class="bg-white border rounded-4 shadow-sm p-4 text-center h-100">
+                        <div class="display-6 fw-bold text-primary mb-2">
+                            12
+                        </div>
+                        <div class="text-muted">
+                            <i class="fas fa-calendar-plus me-1"></i>
+                            Sorties créées
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="bg-white border rounded-4 shadow-sm p-4 text-center h-100">
+                        <div class="display-6 fw-bold text-dark mb-2">
+                            8
+                        </div>
+                        <div class="text-muted">
+                            <i class="fas fa-users me-1"></i>
+                            Participations
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+
+            <div class="col-lg-8">
+                {% if app.user == user %}
+                    <div class="bg-white border rounded-4 shadow-sm p-4 mb-4">
+
+                        <h4 class="fw-bold mb-4">
+                            À propos
+                        </h4>
+
+                        <div class="row g-3">
+
+                            {% if user.firstname or user.lastname %}
+                                <div class="col-md-6">
+                                    <div class="bg-light rounded-4 p-3 h-100">
+                                        <div class="text-muted small mb-1">
+                                            <i class="fas fa-user me-1"></i>
+                                            Nom complet
+                                        </div>
+                                        <div class="fw-semibold">
+                                            {{ user.firstname }} {{ user.lastname }}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            <div class="col-md-6">
+                                <div class="bg-light rounded-4 p-3 h-100">
+                                    <div class="text-muted small mb-1">
+                                        <i class="fas fa-envelope me-1"></i>
+                                        Email
+                                    </div>
+                                    <div class="fw-semibold">
+                                        {{ user.email }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {% if user.phone %}
+                                <div class="col-md-6">
+                                    <div class="bg-light rounded-4 p-3 h-100">
+                                        <div class="text-muted small mb-1">
+                                            <i class="fas fa-phone me-1"></i>
+                                            Téléphone
+                                        </div>
+                                        <div class="fw-semibold">
+                                            {{ user.phone }}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif  %}
+
+                <div class="bg-white border rounded-4 shadow-sm p-4">
+
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+
+                        <h4 class="fw-bold mb-0">
+                            Sorties publiées
+                        </h4>
+
+                        <a href="{{ path('app_events') }}"
+                           class="text-decoration-none fw-semibold">
+                            Voir toutes →
+                        </a>
+
+                    </div>
+
+                    <div class="text-center py-5">
+
+                        <div class="display-1 mb-3">
+                            <i class="fas fa-calendar-xmark"></i>
+                        </div>
+
+                        <h5 class="fw-bold mb-2">
+                            Aucune sortie publiée
+                        </h5>
+
+                        <p class="text-muted mb-4">
+                            Commencez à organiser votre première sortie.
+                        </p>
+
+                        <a href=""
+                           class="btn btn-primary rounded-pill px-4 py-2 fw-semibold">
+                            Créer une sortie
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+
+                <div class="bg-white border rounded-4 shadow-sm p-4 mb-4">
+
+                    <h5 class="fw-bold mb-4">
+                        Informations
+                    </h5>
+
+                    <div class="d-flex justify-content-between mb-3">
+                        <span class="text-muted">
+                            <i class="fas fa-calendar me-1"></i>
+                            Inscription
+                        </span>
+
+                        <span class="fw-semibold">
+                            Janvier 2026
+                        </span>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <span class="text-muted">
+                            <i class="fas fa-fire me-1"></i>
+                            Activité
+                        </span>
+
+                        <span class="fw-semibold text-success">
+                            En ligne
+                        </span>
+                    </div>
+
+                </div>
+
+                <div class="bg-dark text-white rounded-4 shadow-sm p-4">
+
+                    <h5 class="fw-bold mb-3">
+                        Actions rapides
+                    </h5>
+
+                    <div class="d-grid gap-3">
+
+                        {% if app.user == user %}
+                            <a href="{{ path('app_user_edit') }}"
+                               class="btn btn-light rounded-pill fw-semibold">
+                                <i class="fas fa-user-pen me-1"></i>
+                                Modifier mon profil
+                            </a>
+                        {% endif %}
+
+                        <a href="{{ path('app_events') }}"
+                           class="btn btn-outline-light rounded-pill fw-semibold">
+                            <i class="fas fa-compass me-1"></i>
+                            Explorer les sorties
+                        </a>
+
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
 
 {% endblock %}
-
 
