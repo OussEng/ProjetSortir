@@ -25,8 +25,7 @@ final class EventController extends AbstractController
     public function __construct(
         private EventService $eventService,
         private SiteService  $siteService,
-        private EntityManagerInterface $entityManager,
-    )
+        private EntityManagerInterface $entityManager,)
     {
     }
 

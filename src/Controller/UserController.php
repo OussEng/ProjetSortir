@@ -2,30 +2,28 @@
 
 namespace App\Controller;
 
+use App\Entity\Participant;
 use App\Form\ChangePasswordFormType;
 use App\Form\ProfileEditorType;
-use App\Repository\ParticipantRepository;
 use App\Service\ParticipantService;
 use App\Utils\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Form\FormError;
-use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
-final class UserController extends AbstractController
-{
+final class UserController extends AbstractController {
 
-    public function __construct(
-        private readonly EntityManagerInterface $entityManager,
-        private readonly UserPasswordHasherInterface $passwordHasher,
-        private readonly FileUploader $fileUploader,
-        private readonly ParticipantService $participantService,
-    ){}
+    public function __construct(private readonly EntityManagerInterface $entityManager ,
+                                private readonly UserPasswordHasherInterface $passwordHasher,
+                                private FileUploader $fileUploader,
+                                private readonly ParticipantService $participantService,){
+
+    }
 
     #[Route('/profil', name: 'app_user')]
     public function index(): Response
@@ -38,26 +36,40 @@ final class UserController extends AbstractController
     }
 
     #[Route('/profil/modification', name: 'app_user_edit')]
-    public function edit(Request $request, #[Autowire('%img_profil_dir%')] string $imgProfil): Response {
+    public function edit(Request $request, #[Autowire('%img_profil_dir%')] string $imgProfil): Response
+    {
         $user = $this->getUser();
-        //dd($user);
+
+        if (!$user instanceof Participant) {
+            throw $this->createAccessDeniedException('Vous devez être connecté.');
+        }
+
         $userForm = $this->createForm(ProfileEditorType::class, $user);
         $userForm->handleRequest($request);
 
-        if($userForm->isSubmitted() && $userForm->isValid()){
-
+        if ($userForm->isSubmitted() && $userForm->isValid()) {
             $file = $userForm->get('img')->getData();
-            $user->setImg(
-                $this->fileUploader->upload($file, $imgProfil,'img_profil_' . $user->getUsername())
-            );
+
+            if ($file) {
+                $filename = $this->fileUploader->upload(
+                    $file,
+                    $imgProfil,
+                    'img_profil_' . $user->getUsername()
+                );
+
+                $user->setImg($filename);
+            }
 
             $this->entityManager->persist($user);
             $this->entityManager->flush();
+
+            $this->addFlash('success', 'Profil mis à jour avec succès.');
+
             return $this->redirectToRoute('app_user');
         }
 
-        return $this->render('user/profileEditor.html.twig',[
-            'userForm' => $userForm
+        return $this->render('user/profileEditor.html.twig', [
+            'userForm' => $userForm,
         ]);
     }
 

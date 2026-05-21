@@ -5,99 +5,120 @@
 {% block body %}
 
     <div class="container py-4">
-        <div class="d-flex flex-wrap gap-2 mb-4">
-            Filtre par site :
+
+        <div class="d-flex flex-wrap gap-2 mb-4 align-items-center">
+        <span class="fw-semibold">
+            <i class="fas fa-filter me-1"></i> Filtre par site :
+        </span>
+
             <a href="{{ path('app_events') }}" class="btn btn-outline-primary btn-sm rounded-pill">
-                All
+                <i class="fas fa-globe me-1"></i> All
             </a>
+
             {% for site in sites %}
                 <a href="{{ path('app_events_site', { site: site.name }) }}"
                    class="btn btn-outline-primary btn-sm rounded-pill">
-                    {{ site.name }}
+                    <i class="fas fa-location-dot me-1"></i> {{ site.name }}
                 </a>
             {% endfor %}
         </div>
 
         {% if events is empty %}
-            <p>Aucun événement disponible</p>
+            <div class="text-center py-5 text-muted">
+                <i class="fas fa-calendar-xmark fa-3x mb-3"></i>
+                <p class="mb-0">Aucun événement disponible</p>
+            </div>
 
         {% else %}
 
-        <div class="row row-cols-1 row-cols-md-3 g-4">
-            {% for event in events %}
-                <div class="col">
-                    <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
+            <div class="row row-cols-1 row-cols-md-3 g-4">
 
-                        <div class="position-relative">
+                {% for event in events %}
+                    <div class="col">
+                        <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
 
-                            <!-- IMAGE -->
-                            <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/042.webp"
-                                 class="card-img-top"
-                                 style="height: 180px; object-fit: cover;"
-                                 alt="event image">
+                            <div class="position-relative">
 
+                                <!-- IMAGE -->
+                                <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/042.webp"
+                                     class="card-img-top"
+                                     style="height: 180px; object-fit: cover;"
+                                     alt="event image">
 
-                            <!-- USER (à gauche dans l'image) -->
-                            <div
-                                class="position-absolute top-0 start-0 m-2 d-flex align-items-center gap-2 bg-dark bg-opacity-50 text-white px-2 py-1 rounded-pill">
+                                <!-- USER -->
+                                <div class="position-absolute top-0 start-0 m-2 d-flex align-items-center gap-2 bg-dark bg-opacity-50 text-white px-2 py-1 rounded-pill">
 
-                                <a href="#" class="text-decoration-none text-white">  <!-- TODO: Mettre la route vers le profil -->
-                                    <img src="{{ event.organiser.img is not null ? event.organiser.img : 'https://i.pravatar.cc/40?img=3' }}"
-                                         class="rounded-circle border border-white"
-                                         width="30"
-                                         height="30"
-                                         alt="user avatar">
-                                    <span class="small fw-semibold">
-                                        {{ event.organiser.username }}
-                                    </span>
-                                </a>
+                                    <a href="{{ path('app_user_other_profil', { username : event.organiser.username}) }}"
+                                       class="text-decoration-none text-white d-flex align-items-center gap-2">
+
+                                        <img src="{{ event.organiser.img is not null ? event.organiser.img : 'https://i.pravatar.cc/40?img=3' }}"
+                                             class="rounded-circle border border-white"
+                                             width="30"
+                                             height="30"
+                                             alt="user avatar">
+
+                                        <span class="small fw-semibold">
+                                    {{ event.organiser.username }}
+                                </span>
+                                    </a>
+                                </div>
+
+                                <!-- DATE -->
+                                <span class="badge bg-primary position-absolute top-0 end-0 m-2 px-3 py-2 rounded-pill">
+                            <i class="fas fa-calendar-day me-1"></i>
+                            {{ event.dateTimeStart|date('d/m') }}
+                        </span>
+
                             </div>
 
-                            <!-- DATE (à droite dans l'image) -->
-                            <span class="badge bg-primary position-absolute top-0 end-0 m-2 px-3 py-2 rounded-pill">
-                                Date de début : {{ event.dateTimeStart|date('d/m') }}
+                            <div class="card-body p-4">
+
+                                <!-- TITLE -->
+                                <h5 class="fw-bold mb-2">
+                                    {{ event.title }}
+                                </h5>
+
+                                <!-- BADGES -->
+                                <div class="d-flex flex-wrap gap-2 mb-3">
+
+                            <span class="badge bg-light text-dark border">
+                                <i class="fas fa-users me-1"></i>
+                                {{ event.nbParticipants }} participants
                             </span>
 
-                        </div>
+                                    <span class="badge bg-light text-dark border">
+                                <i class="fas fa-clock me-1"></i>
+                                Durée {{ event.duration|date('%h h %i') }}
+                            </span>
 
-                        <div class="card-body p-4">
+                                    <span class="badge bg-info text-dark rounded-pill px-3">
+                                <i class="fas fa-school me-1"></i>
+                                Campus {{ event.site.name }}
+                            </span>
 
-                            <!-- TITLE -->
-                            <h5 class="fw-bold mb-2">
-                                {{ event.title }}
-                            </h5>
+                                </div>
 
-                            <!-- BADGES -->
-                            <div class="d-flex flex-wrap gap-2 mb-3">
-                                <span class="badge bg-light text-dark border">
-                                    👥 {{ event.nbParticipants }} participants
-                                </span>
+                                <!-- FOOTER -->
+                                <div class="text-end text-muted small mb-3">
+                                    <i class="fas fa-hourglass-end me-1"></i>
+                                    Inscription jusqu'au {{ event.dateLimitRegistration|date('d/m/Y') }}
+                                </div>
 
-                                <span class="badge bg-light text-dark border">
-                                    ⏱ Durée {{ event.duration|date('%h h %i') }}
-                                </span>
+                                <a href="{{ path('app_event', {'id': event.id }) }}"
+                                   class="btn btn-primary w-100 rounded-3 fw-semibold">
 
-                                <span class="badge bg-info text-dark rounded-pill px-3">
-                                    🏫 Campus {{ event.site.name }}
-                                </span>
+                                    <i class="fas fa-eye me-1"></i>
+                                    Voir les détails
+                                </a>
+
                             </div>
-
-                            <!-- FOOTER -->
-                            <div class="text-end text-muted small mb-3">
-                                Inscription jusqu'au {{ event.dateLimitRegistration|date('d/m/Y') }}
-                            </div>
-
-                            <a href="{{ path('app_event', {'id': event.id }) }}"
-                               class="btn btn-primary w-100 rounded-3 fw-semibold">
-                                Voir les détails
-                            </a>
-
                         </div>
                     </div>
-                </div>
-            {% endfor %}
-        </div>
+                {% endfor %}
+
+            </div>
         {% endif %}
+
     </div>
 
 {% endblock %}
