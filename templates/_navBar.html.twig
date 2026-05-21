@@ -1,14 +1,13 @@
 {# templates/partials/_navbar.html.twig #}
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
+    <div class="container-fluid px-3 px-lg-4">
 
-<nav class="navbar navbar-expand-lg bg-white border-bottom shadow-sm">
-    <div class="container-fluid">
-
-        <a class="navbar-brand fw-semibold d-flex align-items-center gap-2" href="#">
+        <a class="navbar-brand fw-semibold d-flex align-items-center gap-2" href="{{ path('app_home') }}">
             <i class="ti ti-calendar-event fs-5 text-primary"></i>
             Sortir<span class="text-primary">.com</span>
         </a>
 
-        <button class="navbar-toggler" type="button"
+        <button class="navbar-toggler border-0 shadow-none" type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#navMain"
                 aria-controls="navMain"
@@ -18,28 +17,42 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navMain">
-
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-lg-3">
                 <li class="nav-item">
-                    <a class="nav-link active" href="#">
-                        <i class="ti ti-home me-1"></i>Acceuil
+                    <a class="nav-link{{ app.request.attributes.get('_route') == 'app_home' ? ' active' }}" href="{{ path('app_home') }}">
+                        <i class="ti ti-home me-1"></i>Accueil
                     </a>
                 </li>
-
-                {% if is_granted('ROLE_USER') %}
-
-                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link{{ app.request.attributes.get('_route') == 'app_events' ? ' active' }}" href="{{ path('app_events') }}">
+                        <i class="ti ti-map-2 me-1"></i>Sorties
+                    </a>
+                </li>
             </ul>
 
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center gap-1">
-
-                {% if is_granted('ROLE_USER') %}
-
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center gap-2">
+                {% if app.user %}
+                    <li class="nav-item">
+                        <a class="btn btn-sm btn-primary rounded-pill d-flex align-items-center gap-2 px-3"
+                           href="{{ path('app_user') }}">
+                            <img src="{{ app.user.getImg() is not null ? asset('img/profil/' ~ app.user.getImg()) : 'https://i.pravatar.cc/40?img=3' }}"
+                                 class="rounded-circle border border-white"
+                                 width="28"
+                                 height="28"
+                                 alt="Profil utilisateur">
+                            <span class="d-none d-lg-inline fw-medium">
+                                {{ app.user.username }}
+                            </span>
+                        </a>
+                    </li>
                 {% else %}
-
+                    <li class="nav-item">
+                        <a class="btn btn-outline-primary btn-sm rounded-pill px-3" href="{{ path('app_login') }}">
+                            Connexion
+                        </a>
+                    </li>
                 {% endif %}
             </ul>
-
         </div>
     </div>
 </nav>
