@@ -37,5 +37,26 @@
             </div>
         </div>
     </div>
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+
+            let today = new Date().toISOString().split('T')[0] + "T00:00";
+
+
+            let dateHeureDebut = document.getElementById('event_dateTimeStart');
+
+            let dateLimiteInscription = document.getElementById('event_dateLimitRegistration');
+
+            if (dateHeureDebut && dateLimiteInscription) {
+
+                dateHeureDebut.setAttribute('min', today);
+
+                dateLimiteInscription.setAttribute('min', today);
+
+            }
+
+        });
+    </script>
 
 {% endblock %}

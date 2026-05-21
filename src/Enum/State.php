@@ -4,11 +4,11 @@ namespace App\Enum;
 
 enum State: string
 {
-    case CREATED = 'created';
-    case OPEN = 'open';
-    case CLOSED = 'closed';
-    case ON_GOING = 'on going';
-    case PAST = 'past';
-    case CANCELED = 'canceled';
-    case ARCHIVED = 'archived';
+    case CREATED = 'crée';
+    case OPEN = 'ouverte';
+    case CLOSED = 'fermée';
+    case ON_GOING = 'en cours';
+    case PAST = 'passée';
+    case CANCELED = 'annulée';
+    case ARCHIVED = 'archivée';
 }

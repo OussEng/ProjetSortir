@@ -110,23 +110,35 @@
                     </span>
                     </div>
 
-                    <div class="d-flex justify-content-between mb-3">
-                        <span class="text-muted">⏱ Durée</span>
-                        <span class="fw-semibold">
-                        {{ event.duration|date('%h h %i') }}
-                    </span>
-                    </div>
+                    <div class="mb-4">
 
-                    <div class="d-flex justify-content-between mb-4">
-                        <span class="text-muted">📝 Date de fin d'nscription</span>
-                        <span class="fw-semibold">
-                        {{ event.dateLimitRegistration|date('d/m/Y') }}
-                    </span>
-                    </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">⏱ Durée</span>
+                            <span class="fw-semibold">
+            {{ event.duration|date('%h h %i') }}
+        </span>
+                        </div>
 
-                    <button class="btn btn-primary w-100 py-3 rounded-3 fw-semibold">
-                        Participer à l'événement
-                    </button>
+                        {% if app.user not in event.participants %}
+                            <div class="d-flex flex-column gap-2">
+                                <a href="{{ path('app_participate', {'id': event.id}) }}"
+                                   class="btn btn-primary btn-sm rounded-3 fw-semibold py-2">
+                                    Participer
+                                </a>
+                            </div>
+                        {% endif %}
+
+                        {% if app.user in event.participants %}
+                        <div class="d-flex flex-column gap-2">
+                            <a href="{{ path('app_quit', {'id': event.id}) }}"
+                               class="btn btn-light border btn-sm rounded-3 fw-semibold py-2">
+                                Se désister
+                            </a>
+                        </div>
+                        {% endif %}
+
+
+                    </div>
 
                 </div>
 
