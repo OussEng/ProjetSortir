@@ -22,6 +22,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[Assert\NotBlank(message: 'L’email est obligatoire.')]
+    #[Assert\Email]
     #[Assert\Length(min: 1, max: 180,
         minMessage: 'L’email doit contenir au moins 1 caractère.',
         maxMessage: 'L’email doit contenir au moins 180 caractère.')]

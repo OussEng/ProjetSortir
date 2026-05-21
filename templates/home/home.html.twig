@@ -1,0 +1,78 @@
+{# templates/home/home.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Sortir.com – Découvrez des sorties, événements et sorties à Paris{% endblock %}
+
+{% block body %}
+    <section class="hero py-5 py-lg-7 bg-gradient-light">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-5 mb-lg-0">
+                    <h1 class="display-4 fw-bold mb-3">
+                        Découvrez les meilleures <span class="text-primary">sorties</span> près de chez vous
+                    </h1>
+                    <p class="lead text-muted mb-4">
+                        Sortir.com regroupe des événements, concerts, expositions, sorties entre amis et activités à Paris
+                        pour que tu ne rates plus jamais une bonne occasion de sortir.
+                    </p>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="{{ path('app_events') }}" class="btn btn-primary btn-lg rounded-pill px-4">
+                            <i class="fas fa-map-marked-alt me-2"></i>Explorer les sorties
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card bg-white shadow-lg border-0 overflow-hidden">
+                        <img src="{{ asset('img/image-sortie.webp') }}"
+                             class="img-fluid rounded"
+                             alt="Illustration Sortir.com">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features py-6 bg-white rounded-3 m-5 p-3">
+        <div class="container">
+            <h2 class="text-center mb-5 h1 fw-bold">
+                Comment ça marche ?
+            </h2>
+            <div class="row g-4 g-lg-5">
+                <div class="col-md-4 text-center">
+                    <div class="icon-box rounded-3 d-inline-flex align-items-center justify-content-center mb-4 mx-auto shadow-sm"
+                         style="width: 72px; height: 72px; background: #f8fafc; border: 1px solid rgba(15, 23, 42, 0.08);">
+                        <i class="fas fa-map-marker-alt fa-2x text-primary"></i>
+                    </div>
+                    <h3 class="h5 fw-semibold">Choisissez votre ville</h3>
+                    <p class="text-muted mb-0">
+                        Ciblez Paris ou votre département pour recevoir des recommandations d’événements proches de chez vous,
+                        sans perdre de temps à chercher partout sur le web.
+                    </p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <div class="icon-box rounded-3 d-inline-flex align-items-center justify-content-center mb-4 mx-auto shadow-sm"
+                         style="width: 72px; height: 72px; background: #f8fafc; border: 1px solid rgba(15, 23, 42, 0.08);">
+                        <i class="fas fa-calendar-alt fa-2x text-primary"></i>
+                    </div>
+                    <h3 class="h5 fw-semibold">Découvrez les sorties</h3>
+                    <p class="text-muted mb-0">
+                        Parcourez les concerts, expositions, dégustations, soirées, sorties entre amis et activités sportives
+                        et filtrez par type, date et ambiance pour trouver la sortie idéale à chaque moment.
+                    </p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <div class="icon-box rounded-3 d-inline-flex align-items-center justify-content-center mb-4 mx-auto shadow-sm"
+                         style="width: 72px; height: 72px; background: #f8fafc; border: 1px solid rgba(15, 23, 42, 0.08);">
+                        <i class="fas fa-heart fa-2x text-primary"></i>
+                    </div>
+                    <h3 class="h5 fw-semibold">Créez votre profil</h3>
+                    <p class="text-muted mb-0">
+                        Construisez un profil personnalisé, enregistrez vos préférences, ajoutez votre photo
+                        et connectez-vous avec d’autres amoureux de sorties.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
