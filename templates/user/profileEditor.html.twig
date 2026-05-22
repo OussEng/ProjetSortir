@@ -1,33 +1,150 @@
+{#{% extends 'base.html.twig' %}#}
+
+{#{% block body %}#}
+
+{#    <div class="container py-4">#}
+{#        <div class="row justify-content-center">#}
+{#            <div class="col-md-8 col-lg-6">#}
+{#                <div class="card shadow-sm">#}
+{#                    <div class="card-body">#}
+{#                        {{ form_start(userForm) }}#}
+
+{#                        {{ form_widget(userForm) }}#}
+
+{#                        <button type="submit" class="btn btn-primary mt-3">#}
+{#                            Modifier#}
+{#                        </button>#}
+
+{#                        <a href="{{ path('app_user_edit_password') }}">#}
+{#                            <button type="button" class="btn btn-primary mt-3">#}
+{#                                Modifier le mot de passe#}
+{#                            </button>#}
+{#                        </a>#}
+
+{#                        {{ form_end(userForm) }}#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+
+{#{% endblock %}#}
+
 {% extends 'base.html.twig' %}
+
+{% block title %}Modifier le profil{% endblock %}
 
 {% block body %}
 
-    <div class="container py-4">
+    {% set avatar = app.user and app.user.getImg is not null
+        ? asset('img/profil/' ~ app.user.getImg)
+        : asset('img/profil/avatar-random.png') %}
+
+    <div class="container py-5">
+
+        <!-- HEADER STYLE PROFIL -->
+        <div class="position-relative mb-5">
+
+            <div class="rounded-4 overflow-hidden shadow-sm"
+                 style="height: 200px; background: linear-gradient(135deg, #0f172a, #1e293b);">
+
+                <div class="h-100 d-flex align-items-end p-4">
+
+                    <div class="d-flex align-items-center gap-4">
+
+                        <img src="{{ avatar }}"
+                             class="rounded-circle border border-4 border-white shadow"
+                             style="width: 90px; height: 90px; object-fit: cover;"
+                             alt="avatar">
+
+                        <div class="text-white">
+                            <h2 class="fw-bold mb-1">
+                                <i class="fas fa-user-gear me-2"></i>
+                                Modifier mon profil
+                            </h2>
+                            <p class="text-white-50 mb-0">
+                                Mettez à jour vos informations personnelles
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="position-absolute top-0 end-0 m-3">
+                <a href="{{ path('app_user_other_profil', {'username': app.user.username}) }}"
+                   class="btn btn-light rounded-pill px-4 fw-semibold shadow-sm">
+                    <i class="fas fa-arrow-left me-2"></i>
+                    Retour profil
+                </a>
+            </div>
+
+        </div>
+
         <div class="row justify-content-center">
-            <div class="col-md-8 col-lg-6">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        {{ form_start(userForm) }}
+            <div class="col-lg-8">
+                <div class="bg-white border rounded-4 shadow-sm p-4">
 
-                        {{ form_widget(userForm) }}
+                    <h5 class="fw-bold mb-4">
+                        <i class="fas fa-id-card me-2 text-primary"></i>
+                        Informations du compte
+                    </h5>
 
-                        <button type="submit" class="btn btn-primary mt-3">
-                            Modifier
+                    {{ form_start(userForm) }}
+
+                    <div class="row g-3">
+                        <div class="col-12">
+                            {{ form_row(userForm.username) }}
+                        </div>
+
+                        <div class="col-md-6">
+                            {{ form_row(userForm.firstname) }}
+                        </div>
+
+                        <div class="col-md-6">
+                            {{ form_row(userForm.lastname) }}
+                        </div>
+
+                        <div class="col-12">
+                            {{ form_row(userForm.email) }}
+                        </div>
+
+                        <div class="col-12">
+                            {{ form_row(userForm.phone) }}
+                        </div>
+
+                        <div class="col-12">
+                            {{ form_row(userForm.img) }}
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-wrap gap-3 mt-4">
+
+                        <button type="submit"
+                                class="btn btn-primary rounded-pill px-4 fw-semibold">
+                            <i class="fas fa-check me-2"></i>
+                            Enregistrer
                         </button>
 
-                        <a href="{{ path('app_user_edit_password') }}">
-                            <button type="button" class="btn btn-primary mt-3">
-                                Modifier le mot de passe
-                            </button>
+                        <a href="{{ path('app_user_edit_password') }}"
+                           class="btn btn-outline-dark rounded-pill px-4 fw-semibold">
+                            <i class="fas fa-lock me-2"></i>
+                            Modifier le mot de passe
                         </a>
 
-                        {{ form_end(userForm) }}
+                        <a href="{{ path('app_user_other_profil', {'username': app.user.username}) }}"
+                           class="btn btn-light border rounded-pill px-4 fw-semibold">
+                            <i class="fas fa-xmark me-2"></i>
+                            Annuler
+                        </a>
+
                     </div>
+
+                    {{ form_end(userForm) }}
+
                 </div>
             </div>
         </div>
     </div>
 
 {% endblock %}
-
 

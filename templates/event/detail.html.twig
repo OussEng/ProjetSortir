@@ -8,7 +8,7 @@
 
         <a href="{{ path('app_events') }}"
            class="btn btn-outline-dark px-4 py-2 rounded-pill fw-semibold mb-4">
-            ← Retour
+            <i class="fas fa-arrow-left me-2"></i> Retour
         </a>
 
         <div class="position-relative mb-4">
@@ -18,26 +18,29 @@
                  alt="event image">
 
             <div class="position-absolute top-0 start-0 m-4
-                    d-flex align-items-center gap-2
-                    bg-dark bg-opacity-50 text-white
-                    px-3 py-2 rounded-pill">
+                d-flex align-items-center gap-2
+                bg-dark bg-opacity-50 text-white
+                px-3 py-2 rounded-pill">
 
-                <a href="{{ path('app_user_other_profil' , { username : event.organiser.username}) }}" class="text-decoration-none text-white">
-                    <img src="{{ event.organiser.img is not null ? event.organiser.img : 'https://i.pravatar.cc/40?img=3' }}"
+                <a href="{{ path('app_user_other_profil' , { username : event.organiser.username}) }}"
+                   class="text-decoration-none text-white d-flex align-items-center gap-2">
+
+                    <img src="{{ event.organiser.img is not null ? asset('img/profil/' ~ event.organiser.img) : asset('img/profil/avatar-random.png') }}"
                          class="rounded-circle border border-white"
                          width="40"
                          height="40"
                          alt="user avatar">
 
                     <span class="fw-semibold">
-                        {{ event.organiser.username }}
-                    </span>
+                    {{ event.organiser.username }}
+                </span>
                 </a>
             </div>
 
             <div class="position-absolute bottom-0 end-0 m-4">
             <span class="badge bg-primary px-4 py-3 rounded-pill fs-6 shadow">
-                📅 {{ event.dateTimeStart|date('d/m/Y H:i') }}
+                <i class="fas fa-calendar-alt me-2"></i>
+                {{ event.dateTimeStart|date('d/m/Y H:i') }}
             </span>
             </div>
         </div>
@@ -58,7 +61,7 @@
                     <div class="col-md-6">
                         <div class="p-3 bg-light rounded-4">
                             <div class="text-muted small mb-1">
-                                📍 Lieu
+                                <i class="fas fa-map-marker-alt me-1"></i> Lieu
                             </div>
                             <div class="fw-semibold">
                                 {{ event.location.name }}
@@ -69,7 +72,7 @@
                     <div class="col-md-6">
                         <div class="p-3 bg-light rounded-4">
                             <div class="text-muted small mb-1">
-                                🏫 Campus
+                                <i class="fas fa-school me-1"></i> Campus
                             </div>
 
                             <div class="fw-semibold">
@@ -88,7 +91,9 @@
                     </h5>
 
                     <div class="d-flex justify-content-between mb-3">
-                        <span class="text-muted">👥 Participants</span>
+                    <span class="text-muted">
+                        <i class="fas fa-users me-1"></i> Participants
+                    </span>
                         <span class="fw-semibold">
                         {{ event.nbParticipants }}
                     </span>
@@ -97,35 +102,31 @@
                     <div class="mb-4">
 
                         <div class="d-flex justify-content-between mb-2">
-                            <span class="text-muted">⏱ Durée</span>
+                        <span class="text-muted">
+                            <i class="fas fa-clock me-1"></i> Durée
+                        </span>
                             <span class="fw-semibold">
-            {{ event.duration|date('%h h %i') }}
-        </span>
+                            {{ event.duration|date('%h h %i') }}
+                        </span>
                         </div>
 
                         {% if app.user not in event.participants %}
-                            <div class="d-flex flex-column gap-2">
-                                <a href="{{ path('app_participate', {'id': event.id}) }}"
-                                   class="btn btn-primary btn-sm rounded-3 fw-semibold py-2">
-                                    Participer
-                                </a>
-                            </div>
+                            <a href="{{ path('app_participate', {'id': event.id}) }}"
+                               class="btn btn-primary btn-sm rounded-3 fw-semibold py-2 w-100">
+                                <i class="fas fa-user-plus me-2"></i> Participer
+                            </a>
                         {% endif %}
 
                         {% if app.user in event.participants %}
-                            <div class="d-flex flex-column gap-2">
-                                <a href="{{ path('app_quit', {'id': event.id}) }}"
-                                   class="btn btn-light border btn-sm rounded-3 fw-semibold py-2">
-                                    Se désister
-                                </a>
-                            </div>
+                            <a href="{{ path('app_quit', {'id': event.id}) }}"
+                               class="btn btn-light border btn-sm rounded-3 fw-semibold py-2 w-100">
+                                <i class="fas fa-user-minus me-2"></i> Se désister
+                            </a>
                         {% endif %}
-
 
                     </div>
 
                 </div>
-
             </div>
 
         </div>
