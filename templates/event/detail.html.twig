@@ -38,10 +38,6 @@
             </div>
 
             <div class="position-absolute bottom-0 end-0 m-4">
-            <span class="badge bg-primary px-4 py-3 rounded-pill fs-6 shadow">
-                <i class="fas fa-calendar-alt me-2"></i>
-                {{ event.dateTimeStart|date('d/m/Y H:i') }}
-            </span>
                 <span class="badge bg-primary px-4 py-3 rounded-pill fs-6 shadow">
                     <i class="fas fa-calendar-alt me-2"></i>
                     {{ event.dateTimeStart|date('d/m/Y H:i') }}
@@ -99,12 +95,12 @@
                     </h5>
 
                     <div class="d-flex justify-content-between mb-3">
-                    <span class="text-muted">
-                        <i class="fas fa-users me-1"></i> Participants
-                    </span>
-                        <span class="fw-semibold">
-                        {{ event.nbParticipants }}
-                    </span>
+                        <span class="text-muted">
+                            <i class="fas fa-users me-1"></i> Participants maximum
+                        </span>
+                            <span class="fw-semibold">
+                            {{ event.nbParticipants }}
+                        </span>
                     </div>
 
                     <div class="mb-4">
