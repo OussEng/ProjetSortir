@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Event;
 use App\Enum\State;
+use App\Form\CancelReasonType;
 use App\Form\EventType;
 use App\Repository\EventRepository;
 use App\Service\EventService;
@@ -98,21 +99,20 @@ final class EventController extends AbstractController
             $event->setSite($this->getUser()->getSite());
             $event->setOrganiser($this->getUser());
 
-            if($event->getDateTimeStart() < $now){
+            if ($event->getDateTimeStart() < $now) {
                 $this->addFlash('danger', 'La date de début doit être dans le futur');
                 return $this->redirectToRoute('app_create');
             }
 
-            if($event->getDateLimitRegistration() < $now){
+            if ($event->getDateLimitRegistration() < $now) {
                 $this->addFlash('danger', "La date limite d'inscription doit être dans le futur");
                 return $this->redirectToRoute('app_create');
             }
 
-            if($event->getDateLimitRegistration() > $event->getDateTimeStart()){
+            if ($event->getDateLimitRegistration() > $event->getDateTimeStart()) {
                 $this->addFlash('danger', "La date limite d'inscription doit être avant la date de début");
                 return $this->redirectToRoute('app_create');
             }
-
 
             $this->entityManager->persist($event);
             $this->entityManager->flush();
@@ -120,7 +120,6 @@ final class EventController extends AbstractController
             return $this->redirectToRoute('app_events');
 
         }
-
 
         return $this->render('event/create.html.twig', [
             'eventForm' => $eventForm,
@@ -182,5 +181,46 @@ final class EventController extends AbstractController
         $this->addFlash('success', 'Vous êtes déinscrit de cette sortie');
         return $this->redirectToRoute('app_event', ['id' => $id]);
 
+    }
+
+    #[Route('/annuler/{id}', name: 'cancel')]
+    public function cancel(int $id): Response
+    {
+
+        $user = $this->getUser();
+        $event = $this->eventService->getEvent($id);
+
+        if ($user !== $event->getOrganiser()) {
+            $this->addFlash('danger', "Vous n'êtes pas l'organisateur de cette sortie");
+            return $this->redirectToRoute('app_event', ['id' => $id]);
+
+        }
+
+        $this->eventService->cancelEvent($id);
+        $this->addFlash('success', 'La sortie a été annulée');
+
+        return $this->redirectToRoute('app_event', ['id' => $id]);
+
+    }
+
+    #[Route('/annuler/motif/{id}', name: 'reason')]
+    public function reason(Request $request, int $id): Response{
+
+        $event = $this->eventService->getEvent($id);
+
+        $cancelForm = $this->createForm(CancelReasonType:: class);
+        $cancelForm->handleRequest($request);
+
+        if($cancelForm->isSubmitted() && $cancelForm->isValid()){
+           $reason = $cancelForm->getData()['reason'];
+           $this->eventService->cancelEvent($event, $reason);
+            $this->addFlash('succes', "La sortie a été annulée");
+            return $this->redirectToRoute('app_event', ['id' => $id]);
+        }
+
+
+        return $this->render('event/reason.html.twig', [
+            'cancelForm' => $cancelForm,
+        ]);
     }
 }
