@@ -25,12 +25,11 @@
                 <a href="{{ path('app_user_other_profil' , { username : event.organiser.username}) }}"
                    class="text-decoration-none text-white d-flex align-items-center gap-2">
 
-                    <img
-                        src="{{ event.organiser.img is not null ? asset('img/profil/' ~ event.organiser.img) : asset('img/profil/avatar-random.png') }}"
-                        class="rounded-circle border border-white"
-                        width="40"
-                        height="40"
-                        alt="user avatar">
+                    <img src="{{ event.organiser.img is not null ? asset('img/profil/' ~ event.organiser.img) : asset('img/profil/avatar-random.png') }}"
+                         class="rounded-circle border border-white"
+                         width="40"
+                         height="40"
+                         alt="user avatar">
 
                     <span class="fw-semibold">
                         {{ event.organiser.username }}
@@ -39,6 +38,10 @@
             </div>
 
             <div class="position-absolute bottom-0 end-0 m-4">
+            <span class="badge bg-primary px-4 py-3 rounded-pill fs-6 shadow">
+                <i class="fas fa-calendar-alt me-2"></i>
+                {{ event.dateTimeStart|date('d/m/Y H:i') }}
+            </span>
                 <span class="badge bg-primary px-4 py-3 rounded-pill fs-6 shadow">
                     <i class="fas fa-calendar-alt me-2"></i>
                     {{ event.dateTimeStart|date('d/m/Y H:i') }}
@@ -52,9 +55,12 @@
                 <h1 class="fw-bold mb-3">
                     {{ event.title }}
                 </h1>
+                {% if event.isCancelled()  %}
+                    <h4>Motif d'annulation :</h4>
+                {% endif %}
 
                 <p class="lead text-muted mb-4">
-                    {{ event.eventDescription }}
+                    {{ event.eventDescription  }}
                 </p>
 
                 <hr>
@@ -107,7 +113,7 @@
                         <span class="text-muted">
                             <i class="fas fa-clock me-1"></i> Durée
                         </span>
-                            <span class="fw-semibold">
+                        <span class="fw-semibold">
                             {{ event.duration|date('%h h %i') }}
                         </span>
                         </div>
@@ -126,10 +132,25 @@
                             </a>
                         {% endif %}
 
+
+                        {% if app.user === event.organiser and event.isOpen() %}
+                            <div class="d-flex flex-column gap-2">
+                                <a href="{{ path('app_reason', {'id': event.id}) }}"
+                                   class="btn btn-primary btn-sm rounded-3 fw-semibold py-2">
+                                    Annuler
+                                </a>
+                            </div>
+                        {% endif %}
+
+                        {% if event.isCancelled() %}
+                            <div class="alert alert-warning" role="alert">
+                                Cette sortie a été annulée.
+                            </div>
+                        {% endif %}
+
                     </div>
 
                 </div>
-
             </div>
 
             <div class="col-12 mt-4">
@@ -148,7 +169,7 @@
                                     <div class="card h-100 border-0 shadow-sm rounded-4">
                                         <div class="card-body d-flex align-items-center gap-3">
                                             <img
-                                                src="{{ participant.img is not null ? asset('img/profil/' ~ participant.img) : asset('img/profil/avatar-random.png') }}"
+                                                src="{{ participant.img is not null ? asset('img/profil/' ~ participant.img) : asset('img/profil/avatar-random.png')  }}"
                                                 class="rounded-circle border"
                                                 width="56"
                                                 height="56"
