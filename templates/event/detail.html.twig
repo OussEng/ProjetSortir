@@ -6,21 +6,17 @@
 
     <div class="container py-5">
 
-        <!-- BACK BUTTON -->
         <a href="{{ path('app_events') }}"
            class="btn btn-outline-dark px-4 py-2 rounded-pill fw-semibold mb-4">
             ← Retour
         </a>
 
-        <!-- HERO IMAGE -->
         <div class="position-relative mb-4">
-
             <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/042.webp"
                  class="w-100 rounded-4 shadow-sm"
                  style="height: 420px; object-fit: cover;"
                  alt="event image">
 
-            <!-- USER -->
             <div class="position-absolute top-0 start-0 m-4
                     d-flex align-items-center gap-2
                     bg-dark bg-opacity-50 text-white
@@ -39,21 +35,15 @@
                 </a>
             </div>
 
-            <!-- DATE -->
             <div class="position-absolute bottom-0 end-0 m-4">
             <span class="badge bg-primary px-4 py-3 rounded-pill fs-6 shadow">
                 📅 {{ event.dateTimeStart|date('d/m/Y H:i') }}
             </span>
             </div>
-
         </div>
 
-        <!-- CONTENT -->
         <div class="row g-5">
-
-            <!-- LEFT -->
             <div class="col-lg-8">
-
                 <h1 class="fw-bold mb-3">
                     {{ event.title }}
                 </h1>
@@ -65,13 +55,11 @@
                 <hr>
 
                 <div class="row g-3 mt-2">
-
                     <div class="col-md-6">
                         <div class="p-3 bg-light rounded-4">
                             <div class="text-muted small mb-1">
                                 📍 Lieu
                             </div>
-
                             <div class="fw-semibold">
                                 {{ event.location.name }}
                             </div>
@@ -89,14 +77,10 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
-
             </div>
 
-            <!-- RIGHT SIDEBAR -->
             <div class="col-lg-4">
-
                 <div class="bg-white shadow-sm rounded-4 p-4 border">
 
                     <h5 class="fw-bold mb-4">
@@ -129,12 +113,12 @@
                         {% endif %}
 
                         {% if app.user in event.participants %}
-                        <div class="d-flex flex-column gap-2">
-                            <a href="{{ path('app_quit', {'id': event.id}) }}"
-                               class="btn btn-light border btn-sm rounded-3 fw-semibold py-2">
-                                Se désister
-                            </a>
-                        </div>
+                            <div class="d-flex flex-column gap-2">
+                                <a href="{{ path('app_quit', {'id': event.id}) }}"
+                                   class="btn btn-light border btn-sm rounded-3 fw-semibold py-2">
+                                    Se désister
+                                </a>
+                            </div>
                         {% endif %}
 
 

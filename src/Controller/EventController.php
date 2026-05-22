@@ -38,6 +38,7 @@ final class EventController extends AbstractController
         $events = $this->eventService->getAllEvents();
         $sites = $this->siteService->getAllSites();
 
+
         return $this->render('event/event.html.twig', [
             'events' => $events,
             'sites' => $sites,
