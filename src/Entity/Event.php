@@ -212,7 +212,15 @@ class Event
         return $this;
     }
 
+    public function isOpen() : bool
+    {
+        return $this->state === State::OPEN;
+    }
 
 
+    public function isCancelled() : bool
+    {
+        return $this->state === State::CANCELED;
+    }
 
 }
