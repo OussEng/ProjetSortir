@@ -37,4 +37,10 @@ class EventRepository extends ServiceEntityRepository{
             ->getQuery()
             ->getResult();
     }
+
+    public function save(Event $event): void
+    {
+        $this->getEntityManager()->persist($event);
+        $this->getEntityManager()->flush();
+    }
 }
