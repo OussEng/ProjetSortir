@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Raison de l'annulation{% endblock %}
+
+{% block body %}
+    <div class="container py-5">
+        <h1 class="fw-bold mb-4">Raison de l'annulation</h1>
+
+        {{ form_start(cancelForm) }}
+        {{ form_widget(cancelForm) }}
+        <div class="d-grid mt-4">
+            <button class="btn btn-success btn-lg rounded-3">
+                Valider
+            </button>
+        </div>
+
+        {{ form_end(cancelForm) }}
+    </div>
+{% endblock %}

@@ -48,9 +48,12 @@
                 <h1 class="fw-bold mb-3">
                     {{ event.title }}
                 </h1>
+                {% if event.isCancelled()  %}
+                    <h4>Motif d'annulation :</h4>
+                {% endif %}
 
                 <p class="lead text-muted mb-4">
-                    {{ event.eventDescription }}
+                    {{ event.eventDescription  }}
                 </p>
 
                 <hr>
@@ -122,7 +125,19 @@
                             </div>
                         {% endif %}
 
-
+                        {% if app.user === event.organiser and event.isOpen() %}
+                            <div class="d-flex flex-column gap-2">
+                                <a href="{{ path('app_reason', {'id': event.id}) }}"
+                                   class="btn btn-primary btn-sm rounded-3 fw-semibold py-2">
+                                    Annuler
+                                </a>
+                            </div>
+                        {% endif %}
+                        {% if event.isCancelled() %}
+                            <div class="alert alert-warning" role="alert">
+                                Cette sortie a été annulée.
+                            </div>
+                        {% endif %}
                     </div>
 
                 </div>

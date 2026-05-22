@@ -2,8 +2,10 @@
 
 namespace App\Service;
 
+use App\Entity\Event;
 use App\Entity\Participant;
 use App\Entity\Site;
+use App\Enum\State;
 use App\Repository\EventRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 
@@ -26,11 +28,17 @@ class EventService{
         ]);
     }
 
-    public function getEventByOrganiserId(int $id){
-        return $this->eventRepository->findAllEventByOrganiserId($id);
+    public function participate(int $id): void
+    {
+        $event = $this->getEvent($id);
+        $user = $this->security->getUser();
+        assert($user instanceof Participant);
+        $event -> addParticipant($user);
+        $this -> eventRepository -> save($event);
+
     }
 
-    public function quit(int $id)
+    public function quit(int $id): void
     {
         $event = $this->getEvent($id);
         $user = $this->security->getUser();
@@ -40,14 +48,17 @@ class EventService{
 
     }
 
-    public function participate(int $id)
+    public function cancelEvent(Event $event, $reason): void
     {
-        $event = $this->getEvent($id);
-        $user = $this->security->getUser();
-        assert($user instanceof Participant);
-        $event -> addParticipant($user);
-        $this -> eventRepository -> save($event);
-
+        $event->setState(State::CANCELED);
+        $event->setEventDescription($reason);
+        $this->eventRepository->save($event);
     }
+
+    public function getEventByOrganiserId(int $id){
+        return $this->eventRepository->findAllEventByOrganiserId($id);
+    }
+
+
 
 }
