@@ -25,27 +25,29 @@
                 <a href="{{ path('app_user_other_profil' , { username : event.organiser.username}) }}"
                    class="text-decoration-none text-white d-flex align-items-center gap-2">
 
-                    <img src="{{ event.organiser.img is not null ? asset('img/profil/' ~ event.organiser.img) : asset('img/profil/avatar-random.png') }}"
-                         class="rounded-circle border border-white"
-                         width="40"
-                         height="40"
-                         alt="user avatar">
+                    <img
+                        src="{{ event.organiser.img is not null ? asset('img/profil/' ~ event.organiser.img) : asset('img/profil/avatar-random.png') }}"
+                        class="rounded-circle border border-white"
+                        width="40"
+                        height="40"
+                        alt="user avatar">
 
                     <span class="fw-semibold">
-                    {{ event.organiser.username }}
-                </span>
+                        {{ event.organiser.username }}
+                    </span>
                 </a>
             </div>
 
             <div class="position-absolute bottom-0 end-0 m-4">
-            <span class="badge bg-primary px-4 py-3 rounded-pill fs-6 shadow">
-                <i class="fas fa-calendar-alt me-2"></i>
-                {{ event.dateTimeStart|date('d/m/Y H:i') }}
-            </span>
+                <span class="badge bg-primary px-4 py-3 rounded-pill fs-6 shadow">
+                    <i class="fas fa-calendar-alt me-2"></i>
+                    {{ event.dateTimeStart|date('d/m/Y H:i') }}
+                </span>
             </div>
         </div>
 
         <div class="row g-5">
+
             <div class="col-lg-8">
                 <h1 class="fw-bold mb-3">
                     {{ event.title }}
@@ -127,10 +129,53 @@
                     </div>
 
                 </div>
+
             </div>
 
-        </div>
+            <div class="col-12 mt-4">
+                <div class="bg-white shadow-sm rounded-4 p-4 border">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5 class="fw-bold mb-0">Participants</h5>
+                        <span class="badge bg-light text-dark border">
+                            {{ event.participants|length }} inscrit(s)
+                        </span>
+                    </div>
 
+                    {% if event.participants is not empty %}
+                        <div class="row row-cols-1 row-cols-md-3 g-3">
+                            {% for participant in event.participants %}
+                                <div class="col">
+                                    <div class="card h-100 border-0 shadow-sm rounded-4">
+                                        <div class="card-body d-flex align-items-center gap-3">
+                                            <img
+                                                src="{{ participant.img is not null ? asset('img/profil/' ~ participant.img) : asset('img/profil/avatar-random.png') }}"
+                                                class="rounded-circle border"
+                                                width="56"
+                                                height="56"
+                                                alt="avatar {{ participant.username }}"
+                                                style="object-fit: cover;"
+                                            >
+
+                                            <div class="flex-grow-1">
+                                                <a href="{{ path('app_user_other_profil', { username: participant.username }) }}"
+                                                   class="text-decoration-none fw-semibold text-dark d-block">
+                                                    {{ participant.firstname }} {{ participant.lastname|upper }}
+                                                </a>
+                                                <small class="text-muted">@{{ participant.username }}</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="alert alert-light border mb-0 rounded-4">
+                            Aucun participant inscrit
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
     </div>
 
 {% endblock %}
