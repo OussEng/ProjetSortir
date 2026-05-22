@@ -28,7 +28,7 @@ class EventService{
         ]);
     }
 
-    public function participate(int $id)
+    public function participate(int $id): void
     {
         $event = $this->getEvent($id);
         $user = $this->security->getUser();
@@ -38,7 +38,7 @@ class EventService{
 
     }
 
-    public function quit(int $id)
+    public function quit(int $id): void
     {
         $event = $this->getEvent($id);
         $user = $this->security->getUser();
@@ -48,11 +48,17 @@ class EventService{
 
     }
 
-    public function cancelEvent(Event $event, $reason)
+    public function cancelEvent(Event $event, $reason): void
     {
         $event->setState(State::CANCELED);
         $event->setEventDescription($reason);
         $this->eventRepository->save($event);
     }
+
+    public function getEventByOrganiserId(int $id){
+        return $this->eventRepository->findAllEventByOrganiserId($id);
+    }
+
+
 
 }

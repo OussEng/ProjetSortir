@@ -27,10 +27,20 @@ class EventRepository extends ServiceEntityRepository{
             ->getQuery()
             ->getResult();
     }
-public function save(Event $event): void
-{
-    $this->getEntityManager()->persist($event);
-    $this->getEntityManager()->flush();
-}
 
+    public function findAllEventByOrganiserId(int $id): array {
+        return $query = $this->createQueryBuilder('e')
+            ->Select('e')
+            ->andWhere('e.organiser = :id')
+            ->setParameter('id', $id)
+            ->addOrderBy('e.dateTimeStart', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function save(Event $event): void
+    {
+        $this->getEntityManager()->persist($event);
+        $this->getEntityManager()->flush();
+    }
 }
