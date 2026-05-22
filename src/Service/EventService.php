@@ -24,6 +24,10 @@ class EventService{
         ]);
     }
 
+    public function getEventByOrganiserId(int $id){
+        return $this->eventRepository->findAllEventByOrganiserId($id);
+    }
+
 
 
 }

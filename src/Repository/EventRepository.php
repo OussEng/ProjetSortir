@@ -28,5 +28,13 @@ class EventRepository extends ServiceEntityRepository{
             ->getResult();
     }
 
-
+    public function findAllEventByOrganiserId(int $id): array {
+        return $query = $this->createQueryBuilder('e')
+            ->Select('e')
+            ->andWhere('e.organiser = :id')
+            ->setParameter('id', $id)
+            ->addOrderBy('e.dateTimeStart', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 }

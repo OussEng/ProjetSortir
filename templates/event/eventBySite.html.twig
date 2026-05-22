@@ -25,21 +25,19 @@
 
                         <div class="position-relative">
 
-                            <!-- IMAGE -->
                             <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/042.webp"
                                  class="card-img-top"
                                  style="height: 180px; object-fit: cover;"
                                  alt="event image">
 
-                            <!-- USER (à gauche dans l'image) -->
                             <div
                                 class="position-absolute top-0 start-0 m-2 d-flex align-items-center gap-2 bg-dark bg-opacity-50 text-white px-2 py-1 rounded-pill">
 
                                 <a href="" class="text-decoration-none text-white">  <!-- TODO: Mettre la route vers le profil -->
-                                    <img src="{{ event.organiser.img is not null ? event.organiser.img : 'https://i.pravatar.cc/40?img=3' }}"
+                                    <img src="{{ event.organiser.img is not null ? event.organiser.img : asset('img/profil/avatar-random.png') }}"
                                          class="rounded-circle border border-white"
-                                         width="30"
-                                         height="30"
+                                         width="40"
+                                         height="40"
                                          alt="user avatar">
 
                                     <span class="small fw-semibold">
@@ -49,7 +47,6 @@
 
                             </div>
 
-                            <!-- DATE (à droite dans l'image) -->
                             <span class="badge bg-primary position-absolute top-0 end-0 m-2 px-3 py-2 rounded-pill">
                                 Date de début : {{ event.dateTimeStart|date('d/m') }}
                             </span>
@@ -58,12 +55,10 @@
 
                         <div class="card-body p-4">
 
-                            <!-- TITLE -->
                             <h5 class="fw-bold mb-2">
                                 {{ event.title }}
                             </h5>
 
-                            <!-- BADGES -->
                             <div class="d-flex flex-wrap gap-2 mb-3">
                                 <span class="badge bg-light text-dark border">
                                     👥 {{ event.nbParticipants }} participants
@@ -78,7 +73,6 @@
                                 </span>
                             </div>
 
-                            <!-- FOOTER -->
                             <div class="text-end text-muted small mb-3">
                                 Inscription jusqu'au {{ event.dateLimitRegistration|date('d/m/Y') }}
                             </div>
