@@ -2,8 +2,10 @@
 
 namespace App\Service;
 
+use App\Entity\Event;
 use App\Entity\Participant;
 use App\Entity\Site;
+use App\Enum\State;
 use App\Repository\EventRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 
@@ -44,6 +46,13 @@ class EventService{
         $event -> removeParticipant($user);
         $this -> eventRepository -> save($event);
 
+    }
+
+    public function cancelEvent(Event $event, $reason)
+    {
+        $event->setState(State::CANCELED);
+        $event->setEventDescription($reason);
+        $this->eventRepository->save($event);
     }
 
 }
