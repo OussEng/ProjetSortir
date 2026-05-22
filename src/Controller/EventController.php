@@ -114,7 +114,6 @@ final class EventController extends AbstractController
             }
 
 
-
             $this->entityManager->persist($event);
             $this->entityManager->flush();
             $this->addFlash('success', 'La sortie a été ajoutée avec succès');
