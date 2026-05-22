@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Participant;
 use App\Form\ChangePasswordFormType;
 use App\Form\ProfileEditorType;
+use App\Service\EventService;
 use App\Service\ParticipantService;
 use App\Utils\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
@@ -21,8 +22,8 @@ final class UserController extends AbstractController {
     public function __construct(private readonly EntityManagerInterface $entityManager ,
                                 private readonly UserPasswordHasherInterface $passwordHasher,
                                 private FileUploader $fileUploader,
-                                private readonly ParticipantService $participantService,){
-
+                                private readonly ParticipantService $participantService,
+                                private readonly EventService $eventService){
     }
 
     #[Route('/profil', name: 'app_user')]
@@ -74,18 +75,20 @@ final class UserController extends AbstractController {
     }
 
     #[Route('/profil/{username}', name: 'app_user_other_profil')]
-    public function otherUserProfile(string $username): Response
-    {
+    public function otherUserProfile(string $username): Response {
+
         $user = $this->participantService->getOneParticipantByUsername($username);
+        $events = $this->eventService->getEventByOrganiserId($user->getId());
+        //dd($events);
 
         return $this->render('user/profile.html.twig',[
-            'user' => $user
+            'user' => $user,
+            'events' => $events
         ]);
     }
 
     #[Route('/profil/modification/mot-de-passe', name: 'app_user_edit_password')]
-    public function editPassword(Request $request): Response
-    {
+    public function editPassword(Request $request): Response {
         $user = $this->getUser();
         $editPasswordForm = $this->createForm(ChangePasswordFormType::class);
 
@@ -122,5 +125,15 @@ final class UserController extends AbstractController {
             'editPasswordForm' => $editPasswordForm
         ]);
 
+    }
+
+    #[Route('/profil/sortie/{id}', name: 'app_user_events')]
+    public function allSortieUser(int $id): Response{
+
+        $events = $this->eventService->getEventByOrganiserId($id);
+
+        return $this->render('user/allSortie.html.twig',[
+            'events' => $events
+        ]);
     }
 }

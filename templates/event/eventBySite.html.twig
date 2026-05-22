@@ -34,10 +34,10 @@
                                 class="position-absolute top-0 start-0 m-2 d-flex align-items-center gap-2 bg-dark bg-opacity-50 text-white px-2 py-1 rounded-pill">
 
                                 <a href="" class="text-decoration-none text-white">  <!-- TODO: Mettre la route vers le profil -->
-                                    <img src="{{ event.organiser.img is not null ? event.organiser.img : 'https://i.pravatar.cc/40?img=3' }}"
+                                    <img src="{{ event.organiser.img is not null ? event.organiser.img : asset('img/profil/avatar-random.png') }}"
                                          class="rounded-circle border border-white"
-                                         width="30"
-                                         height="30"
+                                         width="40"
+                                         height="40"
                                          alt="user avatar">
 
                                     <span class="small fw-semibold">

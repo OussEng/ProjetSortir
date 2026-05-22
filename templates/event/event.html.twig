@@ -44,25 +44,23 @@
                                      style="height: 180px; object-fit: cover;"
                                      alt="event image">
 
-                                <!-- USER -->
                                 <div class="position-absolute top-0 start-0 m-2 d-flex align-items-center gap-2 bg-dark bg-opacity-50 text-white px-2 py-1 rounded-pill">
 
                                     <a href="{{ path('app_user_other_profil', { username : event.organiser.username}) }}"
                                        class="text-decoration-none text-white d-flex align-items-center gap-2">
 
-                                        <img src="{{ event.organiser.img is not null ? event.organiser.img : 'https://i.pravatar.cc/40?img=3' }}"
+                                        <img src="{{ event.organiser.img ? asset('img/profil/' ~ event.organiser.img) : asset('img/profil/avatar-random.png') }}"
                                              class="rounded-circle border border-white"
                                              width="30"
                                              height="30"
                                              alt="user avatar">
 
                                         <span class="small fw-semibold">
-                                    {{ event.organiser.username }}
-                                </span>
+                                            {{ event.organiser.username }}
+                                        </span>
                                     </a>
                                 </div>
 
-                                <!-- DATE -->
                                 <span class="badge bg-primary position-absolute top-0 end-0 m-2 px-3 py-2 rounded-pill">
                             <i class="fas fa-calendar-day me-1"></i>
                             {{ event.dateTimeStart|date('d/m') }}
@@ -72,12 +70,10 @@
 
                             <div class="card-body p-4">
 
-                                <!-- TITLE -->
                                 <h5 class="fw-bold mb-2">
                                     {{ event.title }}
                                 </h5>
 
-                                <!-- BADGES -->
                                 <div class="d-flex flex-wrap gap-2 mb-3">
 
                             <span class="badge bg-light text-dark border">
@@ -97,7 +93,6 @@
 
                                 </div>
 
-                                <!-- FOOTER -->
                                 <div class="text-end text-muted small mb-3">
                                     <i class="fas fa-hourglass-end me-1"></i>
                                     Inscription jusqu'au {{ event.dateLimitRegistration|date('d/m/Y') }}
