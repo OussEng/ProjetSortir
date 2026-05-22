@@ -38,7 +38,6 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var string The hashed password
      */
-    #[Assert\NotBlank(message: 'Le mot de passe est obligatoire.')]
     #[Assert\Length(min: 4, max: 180,
         minMessage: 'Le mot de passe doit contenir au moins 4 caractère.',
         maxMessage: 'Le mot de passe doit contenir au moins 180 caractère.')]
