@@ -106,7 +106,7 @@
         </span>
                         </div>
 
-                        {% if app.user not in event.participants %}
+                        {% if app.user not in event.participants and event.isOpen() %}
                             <div class="d-flex flex-column gap-2">
                                 <a href="{{ path('app_participate', {'id': event.id}) }}"
                                    class="btn btn-primary btn-sm rounded-3 fw-semibold py-2">
@@ -118,22 +118,23 @@
                         {% if app.user in event.participants %}
                             <div class="d-flex flex-column gap-2">
                                 <a href="{{ path('app_quit', {'id': event.id}) }}"
-                                   class="btn btn-light border btn-sm rounded-3 fw-semibold py-2">
+                                   class="btn btn-primary border btn-sm rounded-3 fw-semibold py-2">
                                     Se désister
                                 </a>
                             </div>
                         {% endif %}
 
                         {% if app.user === event.organiser and event.isOpen() %}
-                            <div class="d-flex flex-column gap-2">
+                            <div class="d-flex flex-column gap-2 p-3">
                                 <a href="{{ path('app_reason', {'id': event.id}) }}"
-                                   class="btn btn-primary btn-sm rounded-3 fw-semibold py-2">
+                                   class="btn btn-primary btn-sm rounded-3 fw-semibold py-2 px-3 text-center w-100">
                                     Annuler
                                 </a>
                             </div>
                         {% endif %}
+
                         {% if event.isCancelled() %}
-                            <div class="alert alert-warning" role="alert">
+                            <div class="alert alert-warning px-3 py-3 mt-3 mb-3 text-center" role="alert">
                                 Cette sortie a été annulée.
                             </div>
                         {% endif %}
