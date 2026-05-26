@@ -44,7 +44,7 @@ class Event
     /**
      * @var Collection<int, participant>
      */
-    #[ORM\ManyToMany(targetEntity: participant::class, inversedBy: 'events')]
+    #[ORM\ManyToMany(targetEntity: Participant::class, inversedBy: 'events')]
     private Collection $participants;
 
     #[ORM\ManyToOne(inversedBy: 'events')]
