@@ -5,12 +5,10 @@ namespace App\Controller;
 use App\Entity\Event;
 use App\Enum\State;
 use App\Form\CancelReasonType;
-use App\Form\EventType;
-use App\Repository\EventRepository;
+use App\Form\UpdateEventType;
 use App\Service\EventService;
 use App\Service\SiteService;
 use DateTime;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,10 +17,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 
 #[Route('/sortie', name: 'app_')]
-final class EventController extends AbstractController
-{
-
-
+final class EventController extends AbstractController {
     public function __construct(
         private EventService           $eventService,
         private SiteService            $siteService,
@@ -89,7 +84,7 @@ final class EventController extends AbstractController
 
 
         $event = new Event();
-        $eventForm = $this->createForm(EventType::class, $event);
+        $eventForm = $this->createForm(UpdateEventType::class, $event);
         $eventForm->handleRequest($request);
 
 
@@ -126,7 +121,7 @@ final class EventController extends AbstractController
         ]);
     }
 
-    #[Route('/inscrire/sortie/{id}', name: 'participate')]
+    #[Route('/inscrire/sortie/{id}', name: 'participate', requirements: ['id' => '\d+'])]
     public function participate(int $id): Response
     {
 
@@ -159,7 +154,7 @@ final class EventController extends AbstractController
 
     }
 
-    #[Route('/desister/{id}', name: 'quit')]
+    #[Route('/desister/{id}', name: 'quit', requirements: ['id' => '\d+'])]
     public function quit(int $id): Response
     {
         $now = new DateTime('Europe/Paris');
@@ -203,7 +198,7 @@ final class EventController extends AbstractController
 
     }
 
-    #[Route('/annuler/motif/{id}', name: 'reason')]
+    #[Route('/annuler/motif/{id}', name: 'reason', requirements: ['id' => '\d+'])]
     public function reason(Request $request, int $id): Response{
 
         $event = $this->eventService->getEvent($id);
@@ -221,6 +216,55 @@ final class EventController extends AbstractController
 
         return $this->render('event/reason.html.twig', [
             'cancelForm' => $cancelForm,
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param int $id
+     * @return Response
+     */
+    #[Route('/{id}/modifier', name: 'event_update', requirements: ['id' => '\d+'])]
+    public function update(Request $request, int $id): Response {
+
+        $now = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
+
+        $event = $this->eventService->getEvent($id);
+
+        if (!$event) {
+            $this->addFlash('danger', "La sortie est introuvable.");
+            return $this->redirectToRoute('app_home');
+        }
+
+        $eventForm = $this->createForm(UpdateEventType::class, $event);
+        $eventForm->handleRequest($request);
+
+        if ($eventForm->isSubmitted() && $eventForm->isValid()) {
+
+            if ($event->getDateTimeStart() < $now) {
+                $this->addFlash('danger', 'La date de début doit être dans le futur');
+                return $this->redirectToRoute('event_update', ['id' => $id]);
+            }
+
+            if ($event->getDateLimitRegistration() < $now) {
+                $this->addFlash('danger', "La date limite d'inscription doit être dans le futur");
+                return $this->redirectToRoute('event_update', ['id' => $id]);
+            }
+
+            if ($event->getDateLimitRegistration() > $event->getDateTimeStart()) {
+                $this->addFlash('danger', "La date limite d'inscription doit être avant la date de début");
+                return $this->redirectToRoute('event_update', ['id' => $id]);
+            }
+
+            $this->entityManager->flush();
+
+            $this->addFlash('success', 'La sortie a été modifiée avec succès');
+            return $this->redirectToRoute('app_event', ['id' => $event->getId()]);
+        }
+
+        return $this->render('event/update.html.twig', [
+            'eventForm' => $eventForm->createView(),
+            'event' => $event
         ]);
     }
 }
