@@ -39,10 +39,10 @@ class Event
     private State $state = State::CREATED;
 
     #[ORM\ManyToOne(inversedBy: 'organisedEvents')]
-    private ?participant $organiser = null;
+    private ?Participant $organiser = null;
 
     /**
-     * @var Collection<int, participant>
+     * @var Collection<int, Participant>
      */
     #[ORM\ManyToMany(targetEntity: Participant::class, inversedBy: 'events')]
     private Collection $participants;
