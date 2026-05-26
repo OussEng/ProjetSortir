@@ -4,7 +4,7 @@
 
     <div class="container py-5">
         <a href="{{ path('app_event', {'id': event.id }) }}"
-           class="btn btn-outline-dark px-4 py-2 rounded-pill fw-semibold mb-4">
+           class="btn btn-outline-primary px-4 py-2 rounded-pill fw-semibold mb-4">
             ← Retour
         </a>
         <div class="row justify-content-center">
@@ -12,7 +12,7 @@
                 <div class="card shadow border-0 rounded-4">
                     <div class="card-body p-4 p-md-5 bg-light rounded-4">
                         <div class="text-center mb-4">
-                            <h2 class="fw-bold text-success">
+                            <h2 class="fw-bold text-primary">
                                 <i class="fa-solid fa-pen-to-square me-2"></i> Modifier la sortie
                             </h2>
 
@@ -26,7 +26,7 @@
                         {{ form_widget(eventForm) }}
 
                         <div class="d-grid mt-4">
-                            <button class="btn btn-success btn-lg rounded-3">
+                            <button class="btn btn-primary btn-lg rounded-3">
                                 <i class="fa-solid fa-floppy-disk me-2"></i> Enregistrer les modifications
                             </button>
                         </div>

@@ -3,7 +3,6 @@
 namespace App\Service;
 
 use App\Repository\ParticipantRepository;
-use App\Repository\SiteRepository;
 
 readonly class ParticipantService {
 

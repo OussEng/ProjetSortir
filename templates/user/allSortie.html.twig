@@ -31,7 +31,7 @@
                             <a href="{{ path('app_user_other_profil', { username : event.organiser.username}) }}"
                                class="text-decoration-none text-white d-flex align-items-center gap-2">
 
-                                <img src="{{ event.organiser.img is not null ? event.organiser.img : 'https://i.pravatar.cc/40?img=3' }}"
+                                <img src="{{ event.organiser.img is not null ? event.organiser.img : asset('img/avatar-random.png') }}"
                                      class="rounded-circle border border-white"
                                      width="30"
                                      height="30"
