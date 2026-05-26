@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class="container py-5">
+        <a href="{{ path('app_event', {'id': event.id }) }}"
+           class="btn btn-outline-primary px-4 py-2 rounded-pill fw-semibold mb-4">
+            ← Retour
+        </a>
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-6">
+                <div class="card shadow border-0 rounded-4">
+                    <div class="card-body p-4 p-md-5 bg-light rounded-4">
+                        <div class="text-center mb-4">
+                            <h2 class="fw-bold text-primary">
+                                <i class="fa-solid fa-pen-to-square me-2"></i> Modifier la sortie
+                            </h2>
+
+                            <p class="text-muted">
+                                Ajustez les détails de votre aventure
+                            </p>
+                        </div>
+
+                        {{ form_start(eventForm) }}
+
+                        {{ form_widget(eventForm) }}
+
+                        <div class="d-grid mt-4">
+                            <button class="btn btn-primary btn-lg rounded-3">
+                                <i class="fa-solid fa-floppy-disk me-2"></i> Enregistrer les modifications
+                            </button>
+                        </div>
+
+                        {{ form_end(eventForm) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            let today = new Date().toISOString().split('T')[0] + "T00:00";
+
+            let dateHeureDebut = document.getElementById('event_dateTimeStart');
+            let dateLimiteInscription = document.getElementById('event_dateLimitRegistration');
+
+            if (dateHeureDebut && dateLimiteInscription) {
+                dateHeureDebut.setAttribute('min', today);
+                dateLimiteInscription.setAttribute('min', today);
+            }
+        });
+    </script>
+
+{% endblock %}
