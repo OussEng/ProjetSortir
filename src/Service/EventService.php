@@ -59,6 +59,8 @@ class EventService{
         return $this->eventRepository->findAllEventByOrganiserId($id);
     }
 
-
+public function create(Event $event): void{
+        $this->eventRepository->save($event);
+}
 
 }

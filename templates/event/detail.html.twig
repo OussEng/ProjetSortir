@@ -124,14 +124,14 @@
 
                             {% if app.user in event.participants and event.isOpen()%}
                                 <a href="{{ path('app_quit', {'id': event.id}) }}"
-                                   class="btn btn-primary border btn-sm rounded-3 fw-semibold py-2 w-100 text-center">
+                                   class="btn btn-light border btn-sm rounded-3 fw-semibold py-2 w-100 text-center">
                                     <i class="fas fa-user-minus me-2"></i> Se désister
                                 </a>
                             {% endif %}
 
                             {% if (app.user === event.organiser or is_granted('ROLE_ADMIN')) and event.isOpen() %}
                                 <a href="{{ path('app_reason', {'id': event.id}) }}"
-                                   class="btn btn-primary btn-sm rounded-3 fw-semibold py-2 w-100 text-center">
+                                   class="btn btn-danger btn-sm rounded-3 fw-semibold py-2 w-100 text-center">
                                     Annuler
                                 </a>
                             {% endif %}

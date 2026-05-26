@@ -23,5 +23,32 @@ class LocationRepository extends ServiceEntityRepository
             ->setParameter('id', $id)
             ->getQuery()
             ->getResult();
+
+    }
+
+    public function save(Location $location){
+
+        $this->getEntityManager()->persist($location);
+        $this->getEntityManager()->flush();
+    }
+
+    // LocationRepository.php
+
+    public function findAllPaginated(int $page, int $limit): array
+    {
+        return $this->createQueryBuilder('l')
+            ->orderBy('l.id', 'ASC')
+            ->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function countAll(): int
+    {
+        return $this->createQueryBuilder('l')
+            ->select('COUNT(l.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 }

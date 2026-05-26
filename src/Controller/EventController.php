@@ -4,13 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Event;
 use App\Enum\State;
-use App\Form\CancelReasonType;
+use App\EventListener\CancelReasonType;
 use App\Form\EventType;
-use App\Repository\EventRepository;
 use App\Service\EventService;
 use App\Service\SiteService;
 use DateTime;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -114,8 +112,7 @@ final class  EventController extends AbstractController
                 return $this->redirectToRoute('app_create');
             }
 
-            $this->entityManager->persist($event);
-            $this->entityManager->flush();
+            $this->eventService->create($event);
             $this->addFlash('success', 'La sortie a été ajoutée avec succès');
             return $this->redirectToRoute('app_events');
 
