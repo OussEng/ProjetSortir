@@ -37,7 +37,7 @@ class ParticipantFixtures extends Fixture implements DependentFixtureInterface
             $participant->setLastname($faker->lastName());
             $participant->setActive($faker->boolean(90));
             $participant->setPhone($faker->phoneNumber());
-            $participant->setImg($faker->imageUrl(300, 300, 'people'));
+            $participant->setImg(null);
 
             $participant->setPassword(
                 $this->passwordHasher->hashPassword($participant, 'password')

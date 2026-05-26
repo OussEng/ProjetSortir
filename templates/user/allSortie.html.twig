@@ -31,7 +31,7 @@
                             <a href="{{ path('app_user_other_profil', { username : event.organiser.username}) }}"
                                class="text-decoration-none text-white d-flex align-items-center gap-2">
 
-                                <img src="{{ event.organiser.img is not null ? event.organiser.img : 'https://i.pravatar.cc/40?img=3' }}"
+                                <img src="{{ event.organiser.img is not null ? event.organiser.img : asset('img/avatar-random.png') }}"
                                      class="rounded-circle border border-white"
                                      width="30"
                                      height="30"
@@ -80,12 +80,20 @@
                             Inscription jusqu'au {{ event.dateLimitRegistration|date('d/m/Y') }}
                         </div>
 
-                        <a href="{{ path('app_event', {'id': event.id }) }}"
-                           class="btn btn-primary w-100 rounded-3 fw-semibold">
 
-                            <i class="fas fa-eye me-1"></i>
-                            Voir les détails
-                        </a>
+                        <div class="d-flex gap-2 mt-3">
+                            <a href="{{ path('app_event', {'id': event.id }) }}"
+                               class="btn btn-primary rounded-3 fw-semibold flex-fill">
+                                <i class="fas fa-eye me-1"></i>
+                                Voir les détails
+                            </a>
+
+                            <a href="{{ path('app_event_update', {'id': event.id }) }}"
+                               class="btn btn-warning rounded-3 fw-semibold flex-fill">
+                                <i class="fas fa-pen me-1"></i>
+                                Modifier
+                            </a>
+                        </div>
 
                     </div>
                 </div>
