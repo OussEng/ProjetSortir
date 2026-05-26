@@ -129,7 +129,7 @@
                                 </a>
                             {% endif %}
 
-                            {% if app.user === event.organiser and event.isOpen() %}
+                            {% if (app.user === event.organiser or is_granted('ROLE_ADMIN')) and event.isOpen() %}
                                 <a href="{{ path('app_reason', {'id': event.id}) }}"
                                    class="btn btn-primary btn-sm rounded-3 fw-semibold py-2 w-100 text-center">
                                     Annuler

@@ -19,7 +19,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 
 #[Route('/sortie', name: 'app_')]
-final class EventController extends AbstractController
+final class  EventController extends AbstractController
 {
 
 
@@ -186,21 +186,21 @@ final class EventController extends AbstractController
     #[Route('/annuler/{id}', name: 'cancel')]
     public function cancel(int $id): Response
     {
-
         $user = $this->getUser();
         $event = $this->eventService->getEvent($id);
 
-        if ($user !== $event->getOrganiser()) {
+        $isOrganiser = $user === $event->getOrganiser();
+        $isAdmin = $this->isGranted('ROLE_ADMIN');
+
+        if (!$isOrganiser && !$isAdmin) {
             $this->addFlash('danger', "Vous n'êtes pas l'organisateur de cette sortie");
             return $this->redirectToRoute('app_event', ['id' => $id]);
-
         }
 
         $this->eventService->cancelEvent($id);
         $this->addFlash('success', 'La sortie a été annulée');
 
         return $this->redirectToRoute('app_event', ['id' => $id]);
-
     }
 
     #[Route('/annuler/motif/{id}', name: 'reason')]
