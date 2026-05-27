@@ -28,6 +28,7 @@ class UserFixtures extends Fixture
         $user->setActive(true);
         $user->setSite($this->getReference('site_nantes', Site::class));
         $user->setPassword($this->hasher->hashPassword($user, 'mdp123'));
+        $user->setImg(null);
 
         $manager->persist($user);
         $manager->flush();
