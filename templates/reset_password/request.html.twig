@@ -1,22 +1,52 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Reset your password{% endblock %}
+{% block title %}Réinitialisation du mot de passe{% endblock %}
 
 {% block body %}
-    {% for flash_error in app.flashes('reset_password_error') %}
-        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
-    {% endfor %}
-    <h1>Reset your password</h1>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
 
-    {{ form_start(requestForm) }}
-        {{ form_row(requestForm.email) }}
-        <div>
-            <small>
-                Enter your email address, and we will send you a
-                link to reset your password.
-            </small>
+                <div class="card border-0 shadow-sm rounded-4">
+                    <div class="card-body p-4 p-md-5">
+
+                        <div class="text-center mb-4">
+                            <h1 class="h4 mt-2 mb-0">Mot de passe oublié ?</h1>
+                        </div>
+
+                        {% for flash_error in app.flashes('reset_password_error') %}
+                            <div class="alert alert-danger d-flex align-items-center gap-2" role="alert">
+                                <span>{{ flash_error }}</span>
+                            </div>
+                        {% endfor %}
+
+                        <p class="text-muted text-center mb-4">
+                            Saisissez votre adresse email ci-dessous et nous vous enverrons un lien pour réinitialiser votre mot de passe.
+                        </p>
+
+                        {{ form_start(requestForm, {'attr': {'novalidate': 'novalidate'}}) }}
+                        {{ form_row(requestForm.email, {
+                            'label': 'Adresse email',
+                            'attr': {'placeholder': 'exemple@email.com', 'class': 'form-control'}
+                        }) }}
+
+                        <div class="d-grid mt-4">
+                            <button class="btn btn-primary rounded-3">
+                                Envoyer le lien de réinitialisation
+                            </button>
+                        </div>
+                        {{ form_end(requestForm) }}
+
+                        <div class="text-center mt-3">
+                            <a href="{{ path('app_login') }}" class="text-muted small text-decoration-none">
+                                Retour à la connexion
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
         </div>
-
-        <button class="btn btn-primary">Send password reset email</button>
-    {{ form_end(requestForm) }}
+    </div>
 {% endblock %}

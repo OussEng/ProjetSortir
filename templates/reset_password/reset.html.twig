@@ -1,12 +1,46 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Reset your password{% endblock %}
+{% block title %}Nouveau mot de passe{% endblock %}
 
 {% block body %}
-    <h1>Reset your password</h1>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
 
-    {{ form_start(resetForm) }}
-        {{ form_row(resetForm.plainPassword) }}
-        <button class="btn btn-primary">Reset password</button>
-    {{ form_end(resetForm) }}
+                <div class="card border-0 shadow-sm rounded-4">
+                    <div class="card-body p-4 p-md-5">
+
+                        <div class="text-center mb-4">
+                            <h1 class="h4 mt-2 mb-0">Nouveau mot de passe</h1>
+                        </div>
+
+                        <p class="text-muted text-center mb-4">
+                            Choisissez un mot de passe fort et unique que vous n'utilisez pas ailleurs.
+                        </p>
+
+                        {{ form_start(resetForm, {'attr': {'novalidate': 'novalidate'}}) }}
+                        {{ form_row(resetForm.plainPassword, {
+                            'label': 'Nouveau mot de passe',
+                            'attr': {'class': 'form-control'}
+                        }) }}
+
+                        <div class="d-grid mt-4">
+                            <button class="btn btn-primary rounded-3">
+                                Enregistrer le nouveau mot de passe
+                            </button>
+                        </div>
+                        {{ form_end(resetForm) }}
+
+                        <div class="text-center mt-3">
+                            <a href="{{ path('app_login') }}" class="text-muted small text-decoration-none">
+                                Retour à la connexion
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
 {% endblock %}

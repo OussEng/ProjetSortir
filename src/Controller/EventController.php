@@ -13,9 +13,13 @@ use App\Service\EventService;
 use App\Service\SiteService;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Attribute\Route;
 
 
@@ -27,6 +31,7 @@ final class EventController extends AbstractController {
         private EventService           $eventService,
         private SiteService            $siteService,
         private EntityManagerInterface $entityManager,
+        private MailerInterface $mailer,
     )
     {
     }
@@ -125,6 +130,9 @@ final class EventController extends AbstractController {
         ]);
     }
 
+    /**
+     * @throws TransportExceptionInterface
+     */
     #[Route('/inscrire/sortie/{id}', name: 'participate', requirements: ['id' => '\d+'])]
     public function participate(int $id): Response
     {
@@ -153,6 +161,18 @@ final class EventController extends AbstractController {
 
         $this->eventService->participate($id);
         $this->addFlash('success', 'Vous êtes inscrit à cette sortie');
+
+        $email = (new TemplatedEmail())
+            ->from(new Address('notification@sortir.com', 'Sortir.com'))
+            ->to((string) $this->getUser()->getEmail())
+            ->subject('Vous êtes inscrit à une sortie')
+            ->htmlTemplate('event/email.html.twig')
+            ->context([
+                'event' => $event,
+            ])
+        ;
+
+        $this->mailer->send($email);
 
         return $this->redirectToRoute('app_event', ['id' => $id]);
 
