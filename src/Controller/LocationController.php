@@ -39,23 +39,35 @@ final class LocationController extends AbstractController
 
 
     #[Route('/cree', name: 'create')]
-    public function create(Request $request): Response
+    public function create(Request $request, LocationRepository $locationRepository): Response
     {
-
         $location = new Location();
         $locationForm = $this->createForm(LocationType::class, $location);
         $locationForm->handleRequest($request);
 
         if ($locationForm->isSubmitted() && $locationForm->isValid()) {
-            $location = $locationForm->getData();
 
-            $this->locationService->create($location);
-            $this->addFlash('success', 'Le lieu a été créé avec succès.');
-            return $this->redirectToRoute('app_location_list');
+            $location = $locationForm->getData();
+            $existingLocation = $locationRepository->findOneBy([
+                'name' => $location->getName(),
+                'address' => $location->getAddress(),
+            ]);
+
+            if ($existingLocation) {
+
+                $this->addFlash('danger', 'Le lieu existe déjà.');
+
+            } else {
+
+                $this->locationService->create($location);
+                $this->addFlash('success', 'Le lieu a été créé avec succès.');
+
+                return $this->redirectToRoute('app_location_list');
+            }
         }
 
         return $this->render('location/create.html.twig', [
-            'locationForm' => $locationForm,
+            'locationForm' => $locationForm->createView(),
         ]);
     }
 }

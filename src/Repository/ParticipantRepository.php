@@ -42,4 +42,26 @@ class ParticipantRepository extends ServiceEntityRepository implements PasswordU
             ->getResult();
     }
 
+    public function deleteById(int $id): int
+    {
+        return $this->createQueryBuilder('p')
+            ->delete()
+            ->where('p.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->execute();
+    }
+
+    public function desactivateById(int $id): int
+    {
+        return $this->createQueryBuilder('p')
+            ->update()
+            ->set('p.activate', ':activeStatus')
+            ->where('p.id = :id')
+            ->setParameter('activeStatus', false)
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->execute();
+    }
+
 }

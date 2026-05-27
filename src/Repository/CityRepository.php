@@ -25,4 +25,29 @@ class CityRepository extends ServiceEntityRepository{
             ->getQuery()
             ->getResult();
     }
+
+    public function save(City $city)
+    {
+        $this->getEntityManager()->persist($city);
+        $this->getEntityManager()->flush();
+    }
+
+    public function findAllPaginated(int $page, int $limit): array
+    {
+        return $this->createQueryBuilder('l')
+            ->orderBy('l.id', 'ASC')
+            ->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function countAll(): int
+    {
+        return $this->createQueryBuilder('l')
+            ->select('COUNT(l.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 }
+
