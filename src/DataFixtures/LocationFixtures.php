@@ -19,7 +19,7 @@ class LocationFixtures extends Fixture
             ->getRepository(City::class)
             ->findAll();
 
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < 20; $i++) {
 
             $location = new Location();
 

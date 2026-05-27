@@ -26,7 +26,7 @@ class ParticipantFixtures extends Fixture implements DependentFixtureInterface
             throw new \Exception("Aucun Site trouvé. Lance SiteFixtures avant ParticipantFixtures.");
         }
 
-        for ($i = 0; $i < 500; $i++) {
+        for ($i = 0; $i < 20; $i++) {
 
             $participant = new Participant();
 

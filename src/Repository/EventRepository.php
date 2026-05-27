@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Event;
+use App\Entity\Participant;
 use App\Entity\Site;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -31,54 +32,15 @@ class EventRepository extends ServiceEntityRepository{
         $this->getEntityManager()->flush();
     }
 
-//    public function findFilteredPaginated(
-//        string $search,
-//        string $siteId,
-//        string $state,
-//        int $page,
-//        int $limit ): array {
-//
-//        $qb = $this->createQueryBuilder('e')
-//            ->join('e.site', 's')
-//            ->addSelect('s');
-//
-//        if ($search) {
-//            $qb->andWhere('e.title LIKE :search OR e.eventDescription LIKE :search')
-//                ->setParameter('search', '%'.$search.'%');
-//        }
-//
-//        if ($siteId) {
-//            $qb->andWhere('s.id = :siteId')
-//                ->setParameter('siteId', $siteId);
-//        }
-//
-//        if ($state) {
-//            $qb->andWhere('e.state = :state')
-//                ->setParameter('state', $state);
-//        }
-//
-//        $offset = ($page - 1) * $limit;
-//
-//        $qbCount = clone $qb;
-//        $qbCount->select('COUNT(e.id)');
-//        $total = (int) $qbCount->getQuery()->getSingleScalarResult();
-//
-//        $results = $qb
-//            ->orderBy('e.dateTimeStart', 'ASC')
-//            ->setFirstResult($offset)
-//            ->setMaxResults($limit)
-//            ->getQuery()
-//            ->getResult();
-//
-//        return [
-//            'results' => $results,
-//            'totalPages' => ceil($total / $limit)
-//        ];
-//    }
     public function findFilteredPaginated(
         string $search,
         string $siteId,
         string $state,
+        ?string $dateFrom,
+        ?string $dateTo,
+        bool $includePast,
+        ?Participant $participant,
+        bool $myEvents,
         int $page,
         int $limit
     ): array {
@@ -90,7 +52,7 @@ class EventRepository extends ServiceEntityRepository{
             ->addSelect('s');
 
         if (!empty($search)) {
-            $qb->andWhere('e.title LIKE :search OR e.eventDescription LIKE :search')
+            $qb->andWhere('(e.title LIKE :search OR e.eventDescription LIKE :search)')
                 ->setParameter('search', '%' . $search . '%');
         }
 
@@ -104,12 +66,33 @@ class EventRepository extends ServiceEntityRepository{
                 ->setParameter('state', $state);
         }
 
+        if (!empty($dateFrom)) {
+            $qb->andWhere('e.dateTimeStart >= :dateFrom')
+                ->setParameter('dateFrom', new \DateTime($dateFrom));
+        }
+
+        if (!empty($dateTo)) {
+            $qb->andWhere('e.dateTimeStart <= :dateTo')
+                ->setParameter('dateTo', new \DateTime($dateTo . ' 23:59:59'));
+        }
+
+        if (!$includePast) {
+            $qb->andWhere('e.dateTimeStart >= :today')
+                ->setParameter('today', new \DateTime('today'));
+        }
+
+        if ($myEvents && $participant) {
+            $qb->join('e.participants', 'p')
+                ->andWhere('p.id = :participantId')
+                ->setParameter('participantId', $participant->getId());
+        }
+
         $countQb = $this->createQueryBuilder('e')
-            ->select('COUNT(e.id)')
+            ->select('COUNT(DISTINCT e.id)')
             ->join('e.site', 's');
 
         if (!empty($search)) {
-            $countQb->andWhere('e.title LIKE :search OR e.eventDescription LIKE :search')
+            $countQb->andWhere('(e.title LIKE :search OR e.eventDescription LIKE :search)')
                 ->setParameter('search', '%' . $search . '%');
         }
 
@@ -121,6 +104,30 @@ class EventRepository extends ServiceEntityRepository{
         if (!empty($state)) {
             $countQb->andWhere('e.state = :state')
                 ->setParameter('state', $state);
+        }
+
+        if (!empty($dateFrom)) {
+            $countQb->andWhere('e.dateTimeStart >= :dateFrom')
+                ->setParameter('dateFrom', new \DateTime($dateFrom));
+        }
+
+        if (!empty($dateTo)) {
+            $countQb->andWhere('e.dateTimeStart <= :dateTo')
+                ->setParameter('dateTo', new \DateTime($dateTo . ' 23:59:59'));
+        }
+
+        if ($includePast) {
+            $qb->andWhere('e.dateTimeStart < :today')
+                ->setParameter('today', new \DateTime('today'));
+        } else {
+            $qb->andWhere('e.dateTimeStart >= :today')
+                ->setParameter('today', new \DateTime('today'));
+        }
+
+        if ($myEvents && $participant) {
+            $countQb->join('e.participants', 'p')
+                ->andWhere('p.id = :participantId')
+                ->setParameter('participantId', $participant->getId());
         }
 
         $total = (int) $countQb->getQuery()->getSingleScalarResult();

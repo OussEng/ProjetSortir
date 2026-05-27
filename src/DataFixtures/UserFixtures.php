@@ -24,7 +24,7 @@ class UserFixtures extends Fixture
         $user->setFirstname('user');
         $user->setLastname('user');
         $user->setPhone('0600000000');
-        $user->setRoles(['ROLE_USER']);
+        $user->setRoles(['ROLE_ADMIN']);
         $user->setActive(true);
         $user->setSite($this->getReference('site_nantes', Site::class));
         $user->setPassword($this->hasher->hashPassword($user, 'mdp123'));

@@ -34,7 +34,11 @@ final class EventController extends AbstractController {
         $siteId = $request->query->get('site', '');
         $state = $request->query->get('state', '');
 
+        $dateFrom = $request->query->get('dateFrom');
+        $dateTo = $request->query->get('dateTo');
 
+        $includePast = $request->query->getBoolean('includePast');
+        $myEvents = $request->query->getBoolean('myEvents');
 
         $currentPage = $request->query->getInt('page', 1);
         $limitPerPage = 9;
@@ -43,23 +47,20 @@ final class EventController extends AbstractController {
             $search,
             $siteId,
             $state,
+            $dateFrom,
+            $dateTo,
+            $includePast,
+            $myEvents,
+            $this->getUser(),
             $currentPage,
             $limitPerPage
         );
 
-        if ($request->isXmlHttpRequest()) {
-            return $this->render('event/fragments/_events_list.html.twig', [
-                'events'      => $eventsData['results'],
-                'currentPage' => (int) $currentPage,
-                'totalPages'  => (int) $eventsData['totalPages']
-            ]);
-        }
-
         return $this->render('event/event.html.twig', [
-            'events'      => $eventsData['results'],
-            'sites'       => $sites,
+            'events' => $eventsData['results'],
+            'sites' => $sites,
             'currentPage' => (int) $currentPage,
-            'totalPages'  => (int) $eventsData['totalPages']
+            'totalPages' => (int) $eventsData['totalPages']
         ]);
     }
 
@@ -246,17 +247,17 @@ final class EventController extends AbstractController {
 
             if ($event->getDateTimeStart() < $now) {
                 $this->addFlash('danger', 'La date de début doit être dans le futur');
-                return $this->redirectToRoute('event_update', ['id' => $id]);
+                return $this->redirectToRoute('app_event_update', ['id' => $id]);
             }
 
             if ($event->getDateLimitRegistration() < $now) {
                 $this->addFlash('danger', "La date limite d'inscription doit être dans le futur");
-                return $this->redirectToRoute('event_update', ['id' => $id]);
+                return $this->redirectToRoute('app_event_update', ['id' => $id]);
             }
 
             if ($event->getDateLimitRegistration() > $event->getDateTimeStart()) {
                 $this->addFlash('danger', "La date limite d'inscription doit être avant la date de début");
-                return $this->redirectToRoute('event_update', ['id' => $id]);
+                return $this->redirectToRoute('app_event_update', ['id' => $id]);
             }
 
             $this->entityManager->flush();
