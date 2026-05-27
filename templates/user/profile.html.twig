@@ -70,7 +70,9 @@
                 <div class="col-md-6">
                     <div class="bg-white border rounded-4 shadow-sm p-4 text-center h-100">
                         <div class="display-6 fw-bold text-primary mb-2">
-                            {{ events|length }}
+                            {% if events %}
+                                {{ events|length }}
+                            {% endif %}
                         </div>
                         <div class="text-muted">
                             <i class="fas fa-calendar-plus me-1"></i>
