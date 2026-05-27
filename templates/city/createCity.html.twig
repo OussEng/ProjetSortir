@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter une ville{% endblock %}
+
+{% block body %}
+
+    <div class="container py-5">
+
+        <div class="row justify-content-center">
+
+            <div class="col-lg-7">
+
+                <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+
+
+                    <div class="bg-primary text-white p-4">
+
+                        <div class="d-flex align-items-center gap-3">
+
+                            <div class="bg-white bg-opacity-25 rounded-circle d-flex align-items-center justify-content-center"
+                                 style="width: 60px; height: 60px;">
+
+                                <i class="fas fa-city fa-2x"></i>
+
+                            </div>
+
+                            <div>
+
+                                <h2 class="fw-bold mb-1">
+                                    Ajouter une ville
+                                </h2>
+
+                                <p class="mb-0 text-white-50">
+                                    Créez une nouvelle ville
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="card-body p-4 p-lg-5">
+
+                        {{ form_start(cityForm) }}
+
+                        <div class="mb-4">
+
+                            {{ form_widget(cityForm) }}
+
+                        </div>
+
+                        <div class="d-grid">
+
+                            <button class="btn btn-primary btn-lg rounded-3 fw-semibold shadow-sm">
+
+                                <i class="fas fa-plus-circle me-2"></i>
+                                Ajouter la ville
+
+                            </button>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}
