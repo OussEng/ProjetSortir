@@ -1,54 +1,118 @@
 {# templates/partials/_navbar.html.twig #}
+
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
+
     <div class="container-fluid px-3 px-lg-4">
 
-        <a class="navbar-brand fw-semibold d-flex align-items-center gap-2" href="{{ path('app_home') }}">
+        <a class="navbar-brand fw-semibold d-flex align-items-center gap-2"
+           href="{{ path('app_home') }}">
+
             <i class="ti ti-calendar-event fs-5 text-primary"></i>
+
             Sortir<span class="text-primary">.com</span>
+
         </a>
 
-        <button class="navbar-toggler border-0 shadow-none" type="button"
+        <button class="navbar-toggler border-0 shadow-none"
+                type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#navMain"
                 aria-controls="navMain"
                 aria-expanded="false"
                 aria-label="Toggle navigation">
+
             <span class="navbar-toggler-icon"></span>
+
         </button>
 
         <div class="collapse navbar-collapse" id="navMain">
+
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-lg-3">
+
                 <li class="nav-item">
-                    <a class="nav-link{{ app.request.attributes.get('_route') == 'app_home' ? ' active' }}" href="{{ path('app_home') }}">
-                        <i class="ti ti-home me-1"></i>Accueil
+
+                    <a class="nav-link{{ app.request.attributes.get('_route') == 'app_home' ? ' active' }}"
+                       href="{{ path('app_home') }}">
+
+                        <i class="ti ti-home me-1"></i>
+
+                        Accueil
+
                     </a>
+
                 </li>
+
                 <li class="nav-item">
-                    <a class="nav-link{{ app.request.attributes.get('_route') == 'app_events' ? ' active' }}" href="{{ path('app_events') }}">
-                        <i class="ti ti-map-2 me-1"></i>Sorties
+
+                    <a class="nav-link{{ app.request.attributes.get('_route') == 'app_events' ? ' active' }}"
+                       href="{{ path('app_events') }}">
+
+                        <i class="ti ti-map-2 me-1"></i>
+
+                        Sorties
+
                     </a>
+
                 </li>
+
                 <li class="nav-item">
-                    <a class="nav-link{{ app.request.attributes.get('_route') == 'app_location_list' ? ' active' }}" href="{{ path('app_location_list') }}">
-                        <i class="ti ti-map-2 me-1"></i>Lieux
+
+                    <a class="nav-link{{ app.request.attributes.get('_route') == 'app_location_list' ? ' active' }}"
+                       href="{{ path('app_location_list') }}">
+
+                        <i class="ti ti-map-2 me-1"></i>
+
+                        Lieux
+
                     </a>
+
                 </li>
+
                 <li class="nav-item">
-                    <a class="nav-link{{ app.request.attributes.get('_route') == 'app_create' ? ' active' }}" href="{{ path('app_create') }}">
-                        <i class="ti ti-map-2 me-1"></i>Créer une sortie
+
+                    <a class="nav-link{{ app.request.attributes.get('_route') == 'app_create' ? ' active' }}"
+                       href="{{ path('app_create') }}">
+
+                        <i class="ti ti-map-2 me-1"></i>
+
+                        Créer une sortie
+
                     </a>
+
                 </li>
+
                 <li class="nav-item">
-                    <a class="nav-link{{ app.request.attributes.get('_route') == 'app_location_create' ? ' active' }}" href="{{ path('app_location_create') }}">
-                        <i class="ti ti-map-2 me-1"></i>Ajouter un lieu
+
+                    <a class="nav-link{{ app.request.attributes.get('_route') == 'app_location_create' ? ' active' }}"
+                       href="{{ path('app_location_create') }}">
+
+                        <i class="ti ti-map-2 me-1"></i>
+
+                        Ajouter un lieu
+
                     </a>
+
+                </li>
+
+                <li class="nav-item">
+
+                    <a class="nav-link{{ app.request.attributes.get('_route') == 'app_city_create' ? ' active' }}"
+                       href="{{ path('app_city_create') }}">
+
+                        <i class="ti ti-map-2 me-1"></i>
+
+                        Ajouter une ville
+
+                    </a>
+
                 </li>
 
             </ul>
 
-
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center gap-2">
+
                 {% if app.user %}
+
                     {% if is_granted('ROLE_ADMIN') %}
                         <li class="nav-item">
                             <a class="nav-link{{ app.request.attributes.get('_route') == 'app_admin_index' ? ' active' }}" href="{{ path('app_admin_index') }}">
@@ -56,28 +120,62 @@
                             </a>
                         </li>
                     {% endif %}
+
                     <li class="nav-item">
+
                         <a class="btn btn-sm btn-primary rounded-pill d-flex align-items-center gap-2 px-3"
-                           href="{{ path('app_user_other_profil', {username : app.user.username }) }}">
-                            <img src="{{ app.user.getImg() is not null ? asset('img/profil/' ~ app.user.getImg()) : asset('img/avatar-random.png') }}"
+                           href="{{ path('app_user_other_profil', { username : app.user.username }) }}">
+
+                            <img src="{{ app.user.getImg() is not null
+                            ? asset('img/profil/' ~ app.user.getImg())
+                            : asset('img/avatar-random.png') }}"
                                  class="rounded-circle border border-white"
                                  width="30"
                                  height="30"
                                  alt="Profil utilisateur">
+
                             <span class="d-none d-lg-inline fw-medium">
+
                                 {{ app.user.username }}
+
                             </span>
+
                         </a>
+
+                    </li>
+
+                    <li class="nav-item">
+
+                        <a class="btn btn-outline-danger btn-sm rounded-pill px-3"
+                           href="{{ path('app_logout') }}">
+
+                            <i class="ti ti-logout me-1"></i>
+
+                            Déconnexion
+
+                        </a>
+
                     </li>
 
                 {% else %}
+
                     <li class="nav-item">
-                        <a class="btn btn-outline-primary btn-sm rounded-pill px-3" href="{{ path('app_login') }}">
+
+                        <a class="btn btn-outline-primary btn-sm rounded-pill px-3"
+                           href="{{ path('app_login') }}">
+
                             Connexion
+
                         </a>
+
                     </li>
+
                 {% endif %}
+
             </ul>
+
         </div>
+
     </div>
+
 </nav>

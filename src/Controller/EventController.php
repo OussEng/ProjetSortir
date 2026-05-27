@@ -4,10 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Event;
 use App\Enum\State;
-
 use App\Form\CancelReasonType;
 use App\Form\UpdateEventType;
-
 use App\Service\EventService;
 use App\Service\SiteService;
 use DateTime;

@@ -32,8 +32,6 @@ class LocationRepository extends ServiceEntityRepository
         $this->getEntityManager()->flush();
     }
 
-    // LocationRepository.php
-
     public function findAllPaginated(int $page, int $limit): array
     {
         return $this->createQueryBuilder('l')
