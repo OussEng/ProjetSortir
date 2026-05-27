@@ -55,6 +55,9 @@ class Event
     #[ORM\JoinColumn(nullable: false)]
     private ?Location $location = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $private = null;
+
     public function __construct()
     {
         $this->participants = new ArrayCollection();
@@ -221,6 +224,18 @@ class Event
     public function isCancelled() : bool
     {
         return $this->state === State::CANCELED;
+    }
+
+    public function isPrivate(): ?bool
+    {
+        return $this->private;
+    }
+
+    public function setPrivate(?bool $private): static
+    {
+        $this->private = $private;
+
+        return $this;
     }
 
 }
