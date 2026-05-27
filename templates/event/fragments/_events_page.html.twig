@@ -1,0 +1,40 @@
+{% include 'event/fragments/filter.html.twig' %}
+
+<div id="events-wrapper">
+
+    <div id="events-container">
+        {% include 'event/fragments/_events_list.html.twig' %}
+    </div>
+
+    {% if totalPages > 1 %}
+        <div class="d-flex flex-wrap justify-content-center align-items-center gap-2 mt-4">
+
+            {% if currentPage > 1 %}
+                <a href="#" data-page="{{ currentPage - 1 }}"
+                   class="btn btn-outline-primary btn-sm rounded-pill px-3">
+                    ← Précédent
+                </a>
+            {% endif %}
+
+            {% for p in 1..totalPages %}
+                {% if p == 1 or p == totalPages or (p >= currentPage - 2 and p <= currentPage + 2) %}
+                    <a href="#" data-page="{{ p }}"
+                       class="btn btn-sm rounded-circle d-flex align-items-center justify-content-center
+                       {{ p == currentPage ? 'btn-primary' : 'btn-outline-primary' }}"
+                       style="width:34px;height:34px;">
+                        {{ p }}
+                    </a>
+                {% endif %}
+            {% endfor %}
+
+            {% if currentPage < totalPages %}
+                <a href="#" data-page="{{ currentPage + 1 }}"
+                   class="btn btn-outline-primary btn-sm rounded-pill px-3">
+                    Suivant →
+                </a>
+            {% endif %}
+
+        </div>
+    {% endif %}
+
+</div>

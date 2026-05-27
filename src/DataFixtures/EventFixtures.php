@@ -30,7 +30,7 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
             ->getRepository(Location::class)
             ->findAll();
 
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 500; $i++) {
 
             $event = new Event();
 

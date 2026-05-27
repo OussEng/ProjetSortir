@@ -1,119 +1,68 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Events{% endblock %}
+ {% block title %}Events{% endblock %}
 
-{% block body %}
+ {% block body %}
+     <div class="container py-4">
 
-    <div class="container py-4">
+         {% include 'event/fragments/filter.html.twig' %}
 
-        <div class="d-flex flex-wrap gap-2 mb-4 align-items-center">
-        <span class="fw-semibold">
-            <i class="fas fa-filter me-1"></i> Filtre par site :
-        </span>
+         <div id="events-wrapper">
 
-            <a href="{{ path('app_events') }}" class="btn btn-outline-primary btn-sm rounded-pill">
-                <i class="fas fa-globe me-1"></i> All
-            </a>
+             <div id="events-container">
+                 {% include 'event/fragments/_events_list.html.twig' %}
+             </div>
 
-            {% for site in sites %}
-                <a href="{{ path('app_events_site', { site: site.name }) }}"
-                   class="btn btn-outline-primary btn-sm rounded-pill">
-                    <i class="fas fa-location-dot me-1"></i> {{ site.name }}
-                </a>
-            {% endfor %}
-        </div>
+             {% if totalPages > 1 %}
+                 <div class="d-flex flex-wrap justify-content-center align-items-center gap-2 mt-4">
 
-        {% if events is empty %}
-            <div class="text-center py-5 text-muted">
-                <i class="fas fa-calendar-xmark fa-3x mb-3"></i>
-                <p class="mb-0">Aucun événement disponible</p>
-            </div>
+                     {% if currentPage > 1 %}
+                         <a href="{{ path('app_events', app.request.query.all|merge({ page: currentPage - 1 })) }}"
+                            data-page="{{ currentPage - 1 }}"
+                            class="btn btn-outline-primary btn-sm rounded-pill px-3">
+                             ← Précédent
+                         </a>
+                     {% else %}
+                         <button class="btn btn-outline-secondary btn-sm rounded-pill px-3" disabled>
+                             ← Précédent
+                         </button>
+                     {% endif %}
 
-        {% else %}
+                     {% for p in 1..totalPages %}
 
-            <div class="row row-cols-1 row-cols-md-3 g-4">
+                         {% if p == 1
+                             or p == totalPages
+                             or (p >= currentPage - 2 and p <= currentPage + 2) %}
 
-                {% for event in events %}
-                    {% if event.state != 'ARCHIVED' %}
-                        <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
-                                <div class="position-relative">
+                             <a href="{{ path('app_events', app.request.query.all|merge({ page: p })) }}"
+                                data-page="{{ p }}"
+                                class="btn btn-sm rounded-circle d-flex align-items-center justify-content-center {{ p == currentPage ? 'btn-primary' : 'btn-outline-primary' }}"
+                                style="width: 34px; height: 34px;"
+                                {% if p == currentPage %}aria-current="page"{% endif %}>
+                                 {{ p }}
+                             </a>
 
-                                    <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/042.webp"
-                                         class="card-img-top"
-                                         style="height: 180px; object-fit: cover;"
-                                         alt="event image">
+                         {% endif %}
 
-                                    <div class="position-absolute top-0 start-0 m-2 d-flex align-items-center gap-2 bg-dark bg-opacity-50 text-white px-2 py-1 rounded-pill">
+                     {% endfor %}
 
-                                        <a href="{{ path('app_user_other_profil', { username : event.organiser.username}) }}"
-                                           class="text-decoration-none text-white d-flex align-items-center gap-2">
+                     {% if currentPage < totalPages %}
+                         <a href="{{ path('app_events', app.request.query.all|merge({ page: currentPage + 1 })) }}"
+                            data-page="{{ currentPage + 1 }}"
+                            class="btn btn-outline-primary btn-sm rounded-pill px-3">
+                             Suivant →
+                         </a>
+                     {% else %}
+                         <button class="btn btn-outline-secondary btn-sm rounded-pill px-3" disabled>
+                             Suivant →
+                         </button>
+                     {% endif %}
 
-                                            <img src="{{ event.organiser.img ? asset('img/profil/' ~ event.organiser.img) : asset('img/avatar-random.png') }}"
-                                                 class="rounded-circle border border-white"
-                                                 width="40"
-                                                 height="40"
-                                                 alt="user avatar">
+                 </div>
+             {% endif %}
 
-                                            <span class="small fw-semibold">
-                                                {{ event.organiser.username }}
-                                            </span>
-                                        </a>
-                                    </div>
+         </div>
+     </div>
 
-                                    <span class="badge bg-primary position-absolute top-0 end-0 m-2 px-3 py-2 rounded-pill">
-                                <i class="fas fa-calendar-day me-1"></i>
-                                {{ event.dateTimeStart|date('d/m') }}
-                            </span>
+ {% endblock %}
 
-                                </div>
-
-                                <div class="card-body p-4">
-
-                                    <h5 class="fw-bold mb-2">
-                                        {{ event.title }}
-                                    </h5>
-
-                                    <div class="d-flex flex-wrap gap-2 mb-3">
-
-                                <span class="badge bg-light text-dark border">
-                                    <i class="fas fa-users me-1"></i>
-                                    {{ event.nbParticipants }} participants
-                                </span>
-
-                                        <span class="badge bg-light text-dark border">
-                                    <i class="fas fa-clock me-1"></i>
-                                    Durée {{ event.duration|date('%h h %i') }}
-                                </span>
-
-                                        <span class="badge bg-info text-dark rounded-pill px-3">
-                                    <i class="fas fa-school me-1"></i>
-                                    Campus {{ event.site.name }}
-                                </span>
-
-                                    </div>
-
-                                    <div class="text-end text-muted small mb-3">
-                                        <i class="fas fa-hourglass-end me-1"></i>
-                                        Inscription jusqu'au {{ event.dateLimitRegistration|date('d/m/Y') }}
-                                    </div>
-
-                                    <a href="{{ path('app_event', {'id': event.id }) }}"
-                                       class="btn btn-primary w-100 rounded-3 fw-semibold">
-
-                                        <i class="fas fa-eye me-1"></i>
-                                        Voir les détails
-                                    </a>
-
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}
-                {% endfor %}
-
-            </div>
-        {% endif %}
-
-    </div>
-
-{% endblock %}

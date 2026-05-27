@@ -1,0 +1,48 @@
+{% block filter %}
+<div class="card shadow-sm border-0 rounded-4 p-3 mb-4 bg-light">
+    <form id="filter-form" class="row g-3 align-items-end">
+        <div class="col-12 col-md-3">
+            <label class="form-label fw-semibold small text-muted">
+                <i class="fas fa-search me-1"></i> Rechercher un événement
+            </label>
+            <input type="text" name="search" id="search-input" class="form-control rounded-pill"
+                   placeholder="Nom, description, organisateur...">
+        </div>
+
+        <div class="col-12 col-sm-6 col-md-3">
+            <label class="form-label fw-semibold small text-muted">
+                <i class="fas fa-location-dot me-1"></i> Filtrer par site
+            </label>
+            <select name="site" id="site-select" class="form-select rounded-pill">
+                <option value="">Tous les sites (All)</option>
+                {% for site in sites %}
+                    <option value="{{ site.id }}">{{ site.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        {#                <div class="col-12 col-sm-6 col-md-3">#}
+        {#                    <label class="form-label fw-semibold small text-muted">#}
+        {#                        <i class="fas fa-info-circle me-1"></i> Statut#}
+        {#                    </label>#}
+        {#                    <select name="state" id="state-select" class="form-select rounded-pill">#}
+        {#                        <option value="">Tous les statuts</option>#}
+        {#                        <option value="OPEN">Ouverte</option>#}
+        {#                        <option value="ON_GOING">En cours</option>#}
+        {#                        <option value="PASSED">Passée</option>#}
+        {#                    </select>#}
+        {#                </div>#}
+
+        <div class="col-12 col-md-3">
+            <div class="d-flex gap-2">
+                <button type="submit" id="search-button" class="btn btn-primary btn-sm rounded-pill w-100 fw-semibold">
+                    <i class="fas fa-magnifying-glass me-1"></i> Rechercher
+                </button>
+                <button type="button" id="reset-filters" class="btn btn-outline-secondary btn-sm rounded-pill w-50">
+                    <i class="fas fa-rotate-left me-1"></i> Reset
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

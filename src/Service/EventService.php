@@ -59,8 +59,26 @@ class EventService{
         return $this->eventRepository->findAllEventByOrganiserId($id);
     }
 
-public function create(Event $event): void{
-        $this->eventRepository->save($event);
-}
+    public function create(Event $event): void{
+            $this->eventRepository->save($event);
+    }
+
+    public function getFilteredPaginatedEvents(
+        string $search,
+        string $siteId,
+        string $state,
+        int $page,
+        int $limit
+    ): array {
+
+        return $this->eventRepository->findFilteredPaginated(
+            $search,
+            $siteId,
+            $state,
+            $page,
+            $limit
+        );
+    }
+
 
 }

@@ -13,7 +13,7 @@ class CityFixtures extends Fixture
     {
         $faker = Factory::create('fr_FR');
 
-        for ($i = 0; $i < 15; $i++) {
+        for ($i = 0; $i < 200; $i++) {
 
             $city = new City();
 
