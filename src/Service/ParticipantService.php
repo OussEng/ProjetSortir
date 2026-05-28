@@ -74,4 +74,9 @@ readonly class ParticipantService {
             'totalPages' => (int) $totalPages
         ];
     }
+
+    public function getParticipant(int $id): Participant
+    {
+        return $this->participantRepository->find($id);
+    }
 }

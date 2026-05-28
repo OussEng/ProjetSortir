@@ -170,6 +170,17 @@ class EventRepository extends ServiceEntityRepository
     }
 
 
+    public function findEventsByUserParticipated(Participant $participant): array {
+        return $this->createQueryBuilder('e')
+            ->join('e.participants', 'p')
+            ->andWhere('p.id = :id')
+            ->setParameter('id', $participant->getId())
+            ->addOrderBy('e.dateTimeStart', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+
     /**
      * @return Event[]
      */
@@ -193,7 +204,6 @@ class EventRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-
 
 
 

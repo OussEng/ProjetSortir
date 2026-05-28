@@ -41,8 +41,7 @@ final class EventController extends AbstractController {
     }
 
     #[Route('', name: 'events')]
-    public function all(Request $request): Response
-    {
+    public function all(Request $request): Response {
         $sites = $this->siteService->getAllSites();
 
         $search = $request->query->get('search', '');

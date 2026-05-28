@@ -7,6 +7,14 @@
 
          {% include 'event/fragments/filter.html.twig' %}
 
+         <div class="d-flex justify-content-center mb-3">
+             <a href="{{ path('app_create') }}"
+                class="btn btn-outline-success rounded-pill fw-semibold">
+                 <i class="fas fa-plus-circle me-2"></i>
+                 Créer une sortie
+             </a>
+         </div>
+
          <div id="events-wrapper">
 
              <div id="events-container">

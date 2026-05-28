@@ -1,5 +1,3 @@
-{# templates/partials/_navbar.html.twig #}
-
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
 
     <div class="container-fluid px-3 px-lg-4">
@@ -46,6 +44,11 @@
                 </li>
 
                 <li class="nav-item">
+
+                    <a class="nav-link{{ app.request.attributes.get('_route') == 'app_city_list' ? ' active' }}"
+                       href="{{ path('app_city_list') }}">
+                        <i class="ti ti-map-2 me-1"></i>Villes
+
                     <a class="nav-link{{ app.request.attributes.get('_route') == 'app_create' ? ' active' }}"
                        href="{{ path('app_create') }}">
                         <i class="ti ti-map-2 me-1"></i>Créer une sortie
@@ -63,6 +66,7 @@
                     <a class="nav-link{{ app.request.attributes.get('_route') == 'app_groupe_liste' ? ' active' }}"
                        href="{{ path('app_groupe_liste') }}">
                         <i class="ti ti-map-2 me-1"></i>Liste des groupes
+
                     </a>
                 </li>
 
@@ -91,7 +95,6 @@
                                  width="30"
                                  height="30"
                                  alt="Profil utilisateur">
-                            {# Removed d-none d-lg-inline — username should always show #}
                             <span class="fw-medium">{{ app.user.username }}</span>
                         </a>
                     </li>
