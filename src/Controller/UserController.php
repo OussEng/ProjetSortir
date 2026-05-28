@@ -30,9 +30,11 @@ final class UserController extends AbstractController {
     public function index(): Response
     {
         $user = $this->getUser();
+        $events = $this->eventService->getEventByOrganiserId($user->getId());
 
         return $this->render('user/profile.html.twig',[
-            'user' => $user
+            'user' => $user,
+            'events' => $events
         ]);
     }
 

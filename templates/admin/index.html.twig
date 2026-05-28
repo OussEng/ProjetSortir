@@ -3,51 +3,133 @@
 {% block title %}Backoffice Admin{% endblock %}
 
 {% block body %}
-    <div class="container py-5">
-        <div class="card shadow-sm">
-            <div class="card-body p-4">
-                <h3 class="card-title mb-4">Fonctionnalités d'admin</h3>
 
-                <div class="d-flex flex-column">
+    <div class="container py-4">
 
-                    <div class="row g-3">
-                        <div class="col-sm-6 col-lg-3">
-                            <a href="{{ path('app_admin_register_csv') }}"
-                               class="btn btn-info w-100 d-flex align-items-center gap-2">
-                                <i class="bi bi-filetype-csv"></i>
-                                Création des utilisateurs
-                            </a>
-                        </div>
-                        <div class="col-sm-6 col-lg-3">
-                            <a href="{{ path('app_register') }}"
-                               class="btn btn-info w-100 d-flex align-items-center gap-2">
-                                <i class="bi bi-person-plus"></i>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
 
-                                Création d'un utilisateur
+            <div class="col">
 
-                            </a>
+                <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
+
+                    <div class="bg-primary p-3">
+
+                        <div class="rounded-circle bg-white bg-opacity-25 d-flex align-items-center justify-content-center"
+                             style="width: 44px; height: 44px;">
+
+                            <i class="bi bi-filetype-csv text-white fs-5"></i>
+
                         </div>
-                        <div class="col-sm-6 col-lg-3">
-                            <a href=""
-                               class="btn btn-info w-100 d-flex align-items-center gap-2">
-                                <i class="bi bi-people"></i>
-                                Gérer les utilisateurs
-                            </a>
-                        </div>
-                        <div class="col-sm-6 col-lg-3">
-                            <a href=""
-                               class="btn btn-info w-100 d-flex align-items-center gap-2">
-                                <i class="bi bi-calendar-event"></i>
-                                Gérer les Sorties
-                            </a>
-                        </div>
+
                     </div>
+
+                    <div class="card-body p-4 d-flex flex-column">
+
+                        <h5 class="fw-bold mb-3 text-center">
+                            Création des utilisateurs CSV
+                        </h5>
+
+                        <p class="text-muted small text-center flex-grow-1">
+                            Importez plusieurs utilisateurs via un fichier CSV.
+                        </p>
+
+                        <a href="{{ path('app_admin_register_csv') }}"
+                           class="btn btn-primary rounded-3 w-100 d-flex align-items-center justify-content-center gap-2 text-center">
+
+                            <i class="bi bi-upload"></i>
+
+                            Accéder
+
+                        </a>
+
+                    </div>
+
                 </div>
 
+            </div>
 
+            <div class="col">
+
+                <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
+
+                    <div class="bg-success p-3">
+
+                        <div class="rounded-circle bg-white bg-opacity-25 d-flex align-items-center justify-content-center"
+                             style="width: 44px; height: 44px;">
+
+                            <i class="bi bi-person-plus text-white fs-5"></i>
+
+                        </div>
+
+                    </div>
+
+                    <div class="card-body p-4 d-flex flex-column">
+
+                        <h5 class="fw-bold mb-3 text-center">
+                            Création d'un utilisateur
+                        </h5>
+
+                        <p class="text-muted small text-center flex-grow-1">
+                            Ajoutez un nouvel utilisateur manuellement.
+                        </p>
+
+                        <a href="{{ path('app_register') }}"
+                           class="btn btn-success rounded-3 w-100 d-flex align-items-center justify-content-center gap-2 text-center">
+
+                            <i class="bi bi-person-plus"></i>
+
+                            Accéder
+
+                        </a>
+
+                    </div>
+
+                </div>
 
             </div>
+
+            <div class="col">
+
+                <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
+
+                    <div class="bg-dark p-3">
+
+                        <div class="rounded-circle bg-white bg-opacity-25 d-flex align-items-center justify-content-center"
+                             style="width: 44px; height: 44px;">
+
+                            <i class="bi bi-people text-white fs-5"></i>
+
+                        </div>
+
+                    </div>
+
+                    <div class="card-body p-4 d-flex flex-column">
+
+                        <h5 class="fw-bold mb-3 text-center">
+                            Gestion des utilisateurs
+                        </h5>
+
+                        <p class="text-muted small text-center flex-grow-1">
+                            Consultez et gérez les comptes utilisateurs.
+                        </p>
+
+                        <a href="{{ path('app_admin_users') }}"
+                           class="btn btn-dark rounded-3 w-100 d-flex align-items-center justify-content-center gap-2 text-center">
+
+                            <i class="bi bi-people"></i>
+
+                            Accéder
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
         </div>
+
     </div>
 
 {% endblock %}

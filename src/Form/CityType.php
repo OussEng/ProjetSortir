@@ -3,32 +3,25 @@
 namespace App\Form;
 
 use App\Entity\City;
-use App\Entity\Location;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class LocationType extends AbstractType
+class CityType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name', TextType::class, ['label' => "Nom du lieu : "])
-            ->add('address', TextType::class, ['label' => "Adresse du lieu : "])
-            ->add('city', EntityType::class, [
-                'class' => City::class,
-                'choice_label' => 'name',
-                'label' => 'Ville du lieu :',
-            ])
+            ->add('name',TextType::class, ['label' => "Nom de la ville : "])
+            ->add('zipcode',TextType::class, ['label' => "Code postal : "])
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Location::class,
+            'data_class' => City::class,
         ]);
     }
 }

@@ -26,6 +26,11 @@ class SiteFixtures extends Fixture
         $this->addReference('site_nantes', $site2);
         $manager->persist($site2);
 
+        $site3 = new Site();
+        $site3->setName("Rennes ");
+        $this->addReference('site_rennes', $site3);
+        $manager->persist($site3);
+
         $manager->flush();
     }
 }

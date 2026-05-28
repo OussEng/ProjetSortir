@@ -85,13 +85,13 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, Event>
      */
-    #[ORM\OneToMany(targetEntity: Event::class, mappedBy: 'organisor')]
+    #[ORM\OneToMany(targetEntity: Event::class, mappedBy: 'organiser', cascade: ['remove'])]
     private Collection $organisedEvents;
 
     /**
      * @var Collection<int, Event>
      */
-    #[ORM\ManyToMany(targetEntity: Event::class, mappedBy: 'participants')]
+    #[ORM\ManyToMany(targetEntity: Event::class, mappedBy: 'participants', cascade: ['remove'])]
     private Collection $events;
 
     #[ORM\ManyToOne(inversedBy: 'participants')]

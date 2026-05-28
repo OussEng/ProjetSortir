@@ -64,33 +64,6 @@
                     {{ event.eventDescription  }}
                 </p>
 
-
-                <hr>
-
-                <div class="row g-3 mt-2">
-                    <div class="col-md-6">
-                        <div class="p-3 bg-light rounded-4">
-                            <div class="text-muted small mb-1">
-                                <i class="fas fa-map-marker-alt me-1"></i> Lieu
-                            </div>
-                            <div class="fw-semibold">
-                                {{ event.location.name }} | {{ event.location.address }}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="p-3 bg-light rounded-4">
-                            <div class="text-muted small mb-1">
-                                <i class="fas fa-school me-1"></i> Campus
-                            </div>
-
-                            <div class="fw-semibold">
-                                {{ event.site.name }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <div class="col-lg-4">
@@ -140,7 +113,7 @@
                             {% if app.user in event.participants and event.isOpen() %}
                                 <a href="{{ path('app_quit', {'id': event.id}) }}"
 
-                                   class="btn btn-outline-danger rounded-3 fw-semibold py-2 w-100 text-center">
+                                   class="btn btn-outline-dark rounded-3 fw-semibold py-2 w-100 text-center">
 
                                     <i class="fas fa-user-minus me-2"></i> Se désister
                                 </a>

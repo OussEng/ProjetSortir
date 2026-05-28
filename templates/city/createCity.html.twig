@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Ajouter un lieu{% endblock %}
+{% block title %}Ajouter une ville{% endblock %}
 
 {% block body %}
 
@@ -12,6 +12,7 @@
 
                 <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
 
+
                     <div class="bg-primary text-white p-4">
 
                         <div class="d-flex align-items-center gap-3">
@@ -19,18 +20,20 @@
                             <div class="bg-white bg-opacity-25 rounded-circle d-flex align-items-center justify-content-center"
                                  style="width: 60px; height: 60px;">
 
-                                <i class="fas fa-location-dot fa-2x"></i>
+                                <i class="fas fa-city fa-2x"></i>
 
                             </div>
 
                             <div>
+
                                 <h2 class="fw-bold mb-1">
-                                    Ajouter un lieu
+                                    Ajouter une ville
                                 </h2>
 
                                 <p class="mb-0 text-white-50">
-                                    Créez un nouveau lieu pour les événements
+                                    Créez une nouvelle ville
                                 </p>
+
                             </div>
 
                         </div>
@@ -39,11 +42,11 @@
 
                     <div class="card-body p-4 p-lg-5">
 
-                        {{ form_start(locationForm) }}
+                        {{ form_start(cityForm) }}
 
                         <div class="mb-4">
 
-                            {{ form_widget(locationForm) }}
+                            {{ form_widget(cityForm) }}
 
                         </div>
 
@@ -52,13 +55,12 @@
                             <button class="btn btn-primary btn-lg rounded-3 fw-semibold shadow-sm">
 
                                 <i class="fas fa-plus-circle me-2"></i>
-                                Ajouter le lieu
+                                Ajouter la ville
 
                             </button>
 
                         </div>
 
-                        {{ form_end(locationForm) }}
 
                     </div>
 
