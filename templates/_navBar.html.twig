@@ -45,27 +45,6 @@
                     </a>
                 </li>
 
-                <li class="nav-item">
-                    <a class="nav-link{{ app.request.attributes.get('_route') == 'app_create' ? ' active' }}"
-                       href="{{ path('app_create') }}">
-                        <i class="ti ti-map-2 me-1"></i>Créer une sortie
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link{{ app.request.attributes.get('_route') == 'app_location_create' ? ' active' }}"
-                       href="{{ path('app_location_create') }}">
-                        <i class="ti ti-map-2 me-1"></i>Ajouter un lieu
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link{{ app.request.attributes.get('_route') == 'app_city_create' ? ' active' }}"
-                       href="{{ path('app_city_create') }}">
-                        <i class="ti ti-map-2 me-1"></i>Ajouter une ville
-                    </a>
-                </li>
-
             </ul>
 
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center gap-2">

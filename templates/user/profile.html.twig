@@ -221,63 +221,59 @@
 
                 <div class="col-lg-4">
 
-                    <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
-
-                        <h5 class="fw-bold mb-4">
-                            Informations
-                        </h5>
-
-                        <div class="d-flex justify-content-between">
-
-                            <span class="text-muted">
-                                <i class="fas fa-fire me-1"></i>
-                                Activité
-                            </span>
-
-                            {% if user.active == 1 %}
-
-                                <span class="fw-semibold text-success">
-                                    Actif
-                                </span>
-
-                            {% else %}
-
-                                <span class="fw-semibold text-danger">
-                                    Non actif
-                                </span>
-
-                            {% endif %}
-
-                        </div>
-
-                    </div>
-
                     <div class="card border-0 shadow-sm rounded-4 p-4">
 
                         <h5 class="fw-bold mb-4">
+                            <i class="fas fa-bolt text-warning me-2"></i>
                             Actions rapides
                         </h5>
 
-                        <div class="d-grid gap-3">
+                        <div class="d-grid gap-2">
 
                             {% if app.user == user %}
 
                                 <a href="{{ path('app_user_edit') }}"
                                    class="btn btn-primary rounded-pill fw-semibold">
 
-                                    <i class="fas fa-user-pen me-1"></i>
-
+                                    <i class="fas fa-user-pen me-2"></i>
                                     Modifier mon profil
 
                                 </a>
 
                             {% endif %}
 
-                            <a href="{{ path('app_events') }}"
+                            <a href="{{ path('app_create') }}"
+                               class="btn btn-success rounded-pill fw-semibold">
+
+                                <i class="fas fa-circle-plus me-2"></i>
+                                Créer une sortie
+
+                            </a>
+
+                            <hr class="my-2">
+
+                            <a href="{{ path('app_location_create') }}"
                                class="btn btn-outline-primary rounded-pill fw-semibold">
 
-                                <i class="fas fa-compass me-1"></i>
+                                <i class="fas fa-map-marker-alt me-2"></i>
+                                Ajouter un lieu
 
+                            </a>
+
+                            <a href="{{ path('app_city_create') }}"
+                               class="btn btn-outline-success rounded-pill fw-semibold">
+
+                                <i class="fas fa-city me-2"></i>
+                                Ajouter une ville
+
+                            </a>
+
+                            <hr class="my-2">
+
+                            <a href="{{ path('app_events') }}"
+                               class="btn btn-outline-dark rounded-pill fw-semibold">
+
+                                <i class="fas fa-compass me-2"></i>
                                 Explorer les sorties
 
                             </a>
@@ -285,8 +281,7 @@
                             <a href="{{ path('app_logout') }}"
                                class="btn btn-outline-danger rounded-pill fw-semibold">
 
-                                <i class="fas fa-right-from-bracket me-1"></i>
-
+                                <i class="fas fa-right-from-bracket me-2"></i>
                                 Déconnexion
 
                             </a>
