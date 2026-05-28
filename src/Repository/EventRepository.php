@@ -166,4 +166,14 @@ class EventRepository extends ServiceEntityRepository
             'totalItems' => $total
         ];
     }
+
+    public function findEventsByUserParticipated(Participant $participant): array {
+        return $this->createQueryBuilder('e')
+            ->join('e.participants', 'p')
+            ->andWhere('p.id = :id')
+            ->setParameter('id', $participant->getId())
+            ->addOrderBy('e.dateTimeStart', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }
