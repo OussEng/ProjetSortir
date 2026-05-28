@@ -1,57 +1,162 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in{% endblock %}
+{% block title %}Connexion{% endblock %}
 
 {% block body %}
 
-    <div class="min-vh-100 d-flex align-items-center justify-content-center bg-light py-5">
-        <div class="card border shadow-sm w-25">
+    <div class="container-fluid d-flex align-items-center justify-content-center px-3 py-4 mt-5">
+
+        <div class="card border-0 shadow-lg rounded-4 overflow-hidden w-100"
+             style="max-width: 450px;">
+
             <div class="card-body p-4 p-md-5">
 
-                <h1 class="h4 fw-semibold mb-4">Log in</h1>
+                <div class="text-center mb-4">
+
+                    <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                         style="width: 70px; height: 70px;">
+
+                        <i class="fas fa-user-lock text-primary fs-3"></i>
+
+                    </div>
+
+                    <h1 class="h3 fw-bold mb-2 d-flex align-items-center justify-content-center gap-2">
+
+                        <i class="fas fa-user-check text-primary"></i>
+
+                        Bon retour
+
+                    </h1>
+
+                    <p class="text-muted mb-0">
+                        Connectez-vous pour accéder à vos sorties
+                    </p>
+
+                </div>
 
                 {% if error %}
-                    <div class="alert alert-danger py-2 small">
+
+                    <div class="alert alert-danger border-0 rounded-3 py-3 small">
+
+                        <i class="fas fa-circle-exclamation me-2"></i>
+
                         {{ error.messageKey|trans(error.messageData, 'security') }}
+
                     </div>
+
                 {% endif %}
 
                 {% if app.user %}
-                    <div class="alert alert-info py-2 small">
-                        Logged in as <strong>{{ app.user.userIdentifier }}</strong>.
-                        <a href="{{ logout_path() }}" class="alert-link">Logout</a>
+
+                    <div class="alert alert-info border-0 rounded-3 py-3 small">
+
+                        <i class="fas fa-circle-info me-2"></i>
+
+                        Connecté en tant que
+                        <strong>{{ app.user.userIdentifier }}</strong>
+
+                        <a href="{{ logout_path() }}"
+                           class="alert-link text-decoration-none fw-semibold ms-1">
+
+                            Déconnexion
+
+                        </a>
+
                     </div>
+
                 {% endif %}
 
                 <form method="post">
-                    <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
+
+                    <input type="hidden"
+                           name="_csrf_token"
+                           data-controller="csrf-protection"
+                           value="{{ csrf_token('authenticate') }}">
 
                     <div class="mb-3">
-                        <label for="username" class="form-label small fw-medium text-secondary">Email</label>
-                        <input type="email" value="{{ last_username }}" name="_username" id="username"
-                               class="form-control" autocomplete="email" required autofocus>
+
+                        <label for="username"
+                               class="form-label small fw-semibold text-secondary">
+
+                            <i class="fas fa-envelope me-1"></i>
+                            Adresse email
+
+                        </label>
+
+                        <input type="email"
+                               value="{{ last_username }}"
+                               name="_username"
+                               id="username"
+                               class="form-control rounded-3 py-2"
+                               autocomplete="email"
+                               placeholder="exemple@email.com"
+                               required
+                               autofocus>
+
                     </div>
 
-                    <div class="mb-3">
-                        <label for="password" class="form-label small fw-medium text-secondary">Password</label>
-                        <input type="password" name="_password" id="password"
-                               class="form-control" autocomplete="current-password" required>
+                    <div class="mb-2">
+
+                        <label for="password"
+                               class="form-label small fw-semibold text-secondary">
+
+                            <i class="fas fa-lock me-1"></i>
+                            Mot de passe
+
+                        </label>
+
+                        <input type="password"
+                               name="_password"
+                               id="password"
+                               class="form-control rounded-3 py-2"
+                               autocomplete="current-password"
+                               placeholder="••••••••"
+                               required>
+
                     </div>
 
+                    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 mb-4 mt-3">
 
+                        <div class="form-check">
 
-                    <div class="form-check mb-3">
-                        <input type="checkbox" name="_remember_me" id="_remember_me" class="form-check-input">
-                        <label for="_remember_me" class="form-check-label small text-secondary">Se souvenir de moi</label>
+                            <input type="checkbox"
+                                   name="_remember_me"
+                                   id="_remember_me"
+                                   class="form-check-input">
+
+                            <label for="_remember_me"
+                                   class="form-check-label small text-secondary">
+
+                                Se souvenir de moi
+
+                            </label>
+
+                        </div>
+
+                        <a href="{{ path('app_forgot_password_request') }}"
+                           class="small fw-semibold text-decoration-none text-primary">
+
+                            Mot de passe oublié ?
+
+                        </a>
+
                     </div>
 
-                    <button type="submit" class="btn btn-primary w-100">
-                        Sign in
+                    <button type="submit"
+                            class="btn btn-primary w-100 rounded-3 py-2 fw-semibold">
+
+                        <i class="fas fa-right-to-bracket me-2"></i>
+
+                        Se connecter
+
                     </button>
 
                 </form>
+
             </div>
+
         </div>
+
     </div>
 
 {% endblock %}

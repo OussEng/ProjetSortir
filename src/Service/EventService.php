@@ -66,8 +66,8 @@ class EventService{
             $this->eventRepository->save($event);
     }
 
-    public function getEventsByUserParticipated(Participant $participant): array{
-        return $this->eventRepository->findEventsByUserParticipated($participant);
+    public function getEventsByUserParticipated(Participant $participant, int $page, int $limit): array{
+        return $this->eventRepository->findEventsByUserParticipated($participant, $page, $limit);
     }
 
     public function getFilteredPaginatedEvents(

@@ -28,47 +28,36 @@
                         <i class="ti ti-home me-1"></i>Accueil
                     </a>
                 </li>
+                    <li class="nav-item">
+                        <a class="nav-link{{ app.request.attributes.get('_route') == 'app_events' ? ' active' }}"
+                           href="{{ path('app_events') }}">
+                            <i class="ti ti-map-2 me-1"></i>Sorties
+                        </a>
+                    </li>
+                {% if app.user %}
+                    <li class="nav-item">
+                        <a class="nav-link{{ app.request.attributes.get('_route') == 'app_location_list' ? ' active' }}"
+                           href="{{ path('app_location_list') }}">
+                            <i class="ti ti-map-2 me-1"></i>Lieux
+                        </a>
+                    </li>
 
-                <li class="nav-item">
-                    <a class="nav-link{{ app.request.attributes.get('_route') == 'app_events' ? ' active' }}"
-                       href="{{ path('app_events') }}">
-                        <i class="ti ti-map-2 me-1"></i>Sorties
-                    </a>
-                </li>
+                    <li class="nav-item">
 
-                <li class="nav-item">
-                    <a class="nav-link{{ app.request.attributes.get('_route') == 'app_location_list' ? ' active' }}"
-                       href="{{ path('app_location_list') }}">
-                        <i class="ti ti-map-2 me-1"></i>Lieux
-                    </a>
-                </li>
+                        <a class="nav-link{{ app.request.attributes.get('_route') == 'app_city_list' ? ' active' }}"
+                           href="{{ path('app_city_list') }}">
+                            <i class="ti ti-map-2 me-1"></i>Villes
+                        </a>
+                    </li>
 
-                <li class="nav-item">
+                    <li class="nav-item">
+                        <a class="nav-link{{ app.request.attributes.get('_route') == 'app_groupe_liste' ? ' active' }}"
+                           href="{{ path('app_groupe_liste') }}">
+                            <i class="ti ti-map-2 me-1"></i>Liste des groupes
 
-                    <a class="nav-link{{ app.request.attributes.get('_route') == 'app_city_list' ? ' active' }}"
-                       href="{{ path('app_city_list') }}">
-                        <i class="ti ti-map-2 me-1"></i>Villes
-
-                    <a class="nav-link{{ app.request.attributes.get('_route') == 'app_create' ? ' active' }}"
-                       href="{{ path('app_create') }}">
-                        <i class="ti ti-map-2 me-1"></i>Créer une sortie
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link{{ app.request.attributes.get('_route') == 'app_location_create' ? ' active' }}"
-                       href="{{ path('app_location_create') }}">
-                        <i class="ti ti-map-2 me-1"></i>Ajouter un lieu
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link{{ app.request.attributes.get('_route') == 'app_groupe_liste' ? ' active' }}"
-                       href="{{ path('app_groupe_liste') }}">
-                        <i class="ti ti-map-2 me-1"></i>Liste des groupes
-
-                    </a>
-                </li>
+                        </a>
+                    </li>
+                {% endif %}
 
             </ul>
 

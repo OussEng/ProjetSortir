@@ -178,12 +178,14 @@ class EventRepository extends ServiceEntityRepository
     }
 
 
-    public function findEventsByUserParticipated(Participant $participant): array {
+    public function findEventsByUserParticipated(Participant $participant, int $page, int $limit): array {
         return $this->createQueryBuilder('e')
             ->join('e.participants', 'p')
             ->andWhere('p.id = :id')
             ->setParameter('id', $participant->getId())
             ->addOrderBy('e.dateTimeStart', 'ASC')
+            ->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
     }
@@ -225,9 +227,24 @@ class EventRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function countAllEventCreated(Participant $participant): int
+    {
+        return (int) $this->createQueryBuilder('e')
+            ->select('COUNT(e.id)')
+            ->andWhere('e.organiser = :participant')
+            ->setParameter('participant', $participant)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 
-
-
-
-
+    public function countAllEventParticipated(Participant $participant): int
+    {
+        return (int) $this->createQueryBuilder('e')
+            ->select('COUNT(DISTINCT e.id)')
+            ->join('e.participants', 'p')
+            ->andWhere('p = :participant')
+            ->setParameter('participant', $participant)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 }

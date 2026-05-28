@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Event;
 use App\Enum\State;
 
-use App\Form\EventType;
 use App\Form\CancelReasonType;
 use App\Form\UpdateEventType;
 
@@ -26,7 +25,7 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Attribute\Route;
 
 
-#[Route('/sortie', name: 'app_')]
+#[Route('/sorties', name: 'app_')]
 
 final class EventController extends AbstractController {
 

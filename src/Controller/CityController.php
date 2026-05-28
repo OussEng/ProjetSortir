@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/ville', name: 'app_city_')]
+#[Route('/villes', name: 'app_city_')]
 final class CityController extends AbstractController
 {
     public function __construct(
@@ -31,7 +31,7 @@ final class CityController extends AbstractController
         $totalPages = ceil($total / $limit);
 
         return $this->render('city/listCity.html.twig', [
-            'city'   => $city,
+            'city'        => $city,
             'currentPage' => $page,
             'totalPages'  => $totalPages,
             'total'       => $total,
