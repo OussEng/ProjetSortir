@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Event;
 use App\Enum\State;
 
+use App\Form\EventType;
 use App\Form\CancelReasonType;
 use App\Form\UpdateEventType;
 

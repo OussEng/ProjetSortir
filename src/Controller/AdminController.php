@@ -115,7 +115,8 @@ final class AdminController extends AbstractController {
         ]);
     }
 
-    #[Route('/admin/utilisateurs/supprimer/{id}', name: 'delete_user', methods: ['GET', 'POST'])]
+
+    #[Route('/utilisateurs/supprimer/{id}', name: 'delete_user', methods: ['GET', 'POST'])]
     public function delete(int $id): Response{
 
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
@@ -125,7 +126,7 @@ final class AdminController extends AbstractController {
         return $this->redirectToRoute('app_admin_users');
     }
 
-    #[Route('/admin/utilisateurs/desactiver/{id}', name: 'desactivate_status', methods: ['GET', 'POST'])]
+    #[Route('/utilisateurs/desactiver/{id}', name: 'desactivate_status', methods: ['GET', 'POST'])]
     public function desactivate(int $id): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
@@ -147,7 +148,7 @@ final class AdminController extends AbstractController {
     }
 
 
-    #[Route('/admin/utilisateurs/activer/{id}', name: 'actived_status', methods: ['GET', 'POST'])]
+    #[Route('/utilisateurs/activer/{id}', name: 'actived_status', methods: ['GET', 'POST'])]
     public function actived(int $id): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
