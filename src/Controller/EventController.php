@@ -15,37 +15,58 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-
 #[Route('/sortie', name: 'app_')]
 
 final class EventController extends AbstractController {
 
     public function __construct(
-        private EventService           $eventService,
-        private SiteService            $siteService,
-        private EntityManagerInterface $entityManager,
-    )
-    {
+        private readonly EventService           $eventService,
+        private readonly SiteService            $siteService,
+        private readonly EntityManagerInterface $entityManager){
     }
 
-
     #[Route('', name: 'events')]
-    public function all(): Response
+    public function all(Request $request): Response
     {
-
-        $events = $this->eventService->getAllEvents();
         $sites = $this->siteService->getAllSites();
 
+        $search = $request->query->get('search', '');
+        $siteId = $request->query->get('site', '');
+        $state = $request->query->get('state', '');
+
+        $dateFrom = $request->query->get('dateFrom');
+        $dateTo = $request->query->get('dateTo');
+
+        $includePast = $request->query->getBoolean('includePast');
+        $myEvents = $request->query->getBoolean('myEvents');
+
+        $currentPage = $request->query->getInt('page', 1);
+        $limitPerPage = 9;
+
+        $eventsData = $this->eventService->getFilteredPaginatedEvents(
+            $search,
+            $siteId,
+            $state,
+            $dateFrom,
+            $dateTo,
+            $includePast,
+            $myEvents,
+            $this->getUser(),
+            $currentPage,
+            $limitPerPage
+        );
 
         return $this->render('event/event.html.twig', [
-            'events' => $events,
+            'events' => $eventsData['results'],
             'sites' => $sites,
+            'currentPage' => (int) $currentPage,
+            'totalPages' => (int) $eventsData['totalPages']
         ]);
     }
 
     #[Route('/{id}', name: 'event', requirements: ['id' => '\d+'], methods: ['GET'])]
-    public function byId(int $id): Response
-    {
+    public function byId(int $id): Response {
+
         $event = $this->eventService->getEvent($id);
 
         if (!$event) {
@@ -56,24 +77,6 @@ final class EventController extends AbstractController {
 
         return $this->render('event/detail.html.twig', [
             'event' => $event,
-            'sites' => $sites,
-        ]);
-    }
-
-    #[Route('/site/{site}', name: 'events_site')]
-    public function allBySite(string $site): Response
-    {
-        $siteEntity = $this->siteService->getByName($site);
-
-        if (!$siteEntity) {
-            throw $this->createNotFoundException('Site not found');
-        }
-
-        $events = $this->eventService->getEventBySite($siteEntity);
-        $sites = $this->siteService->getAllSites();
-
-        return $this->render('event/eventBySite.html.twig', [
-            'eventsBySite' => $events,
             'sites' => $sites,
         ]);
     }
@@ -244,17 +247,17 @@ final class EventController extends AbstractController {
 
             if ($event->getDateTimeStart() < $now) {
                 $this->addFlash('danger', 'La date de début doit être dans le futur');
-                return $this->redirectToRoute('event_update', ['id' => $id]);
+                return $this->redirectToRoute('app_event_update', ['id' => $id]);
             }
 
             if ($event->getDateLimitRegistration() < $now) {
                 $this->addFlash('danger', "La date limite d'inscription doit être dans le futur");
-                return $this->redirectToRoute('event_update', ['id' => $id]);
+                return $this->redirectToRoute('app_event_update', ['id' => $id]);
             }
 
             if ($event->getDateLimitRegistration() > $event->getDateTimeStart()) {
                 $this->addFlash('danger', "La date limite d'inscription doit être avant la date de début");
-                return $this->redirectToRoute('event_update', ['id' => $id]);
+                return $this->redirectToRoute('app_event_update', ['id' => $id]);
             }
 
             $this->entityManager->flush();

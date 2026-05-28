@@ -89,7 +89,6 @@ final class AdminController extends AbstractController {
             }
         }
 
-
         return $this->render('admin/registerCsv.html.twig', [
             'form' => $form->createView(),
         ]);
@@ -115,7 +114,6 @@ final class AdminController extends AbstractController {
             'totalPages'  => $usersData['totalPages']
         ]);
     }
-
 
     #[Route('/admin/utilisateurs/supprimer/{id}', name: 'delete_user', methods: ['GET', 'POST'])]
     public function delete(int $id): Response{

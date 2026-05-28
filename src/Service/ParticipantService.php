@@ -60,8 +60,7 @@ readonly class ParticipantService {
     }
 
 
-    public function getPaginatedParticipants(int $page, int $limit): array
-    {
+    public function getPaginatedParticipants(int $page, int $limit): array {
         $offset = ($page - 1) * $limit;
 
         $totalUsers = $this->participantRepository->count([]);
