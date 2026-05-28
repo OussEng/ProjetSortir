@@ -11,18 +11,18 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/lieu', name: 'app_location_')]
+#[Route('/lieux', name: 'app_location_')]
 final class LocationController extends AbstractController
 {
     public function __construct(
-        private LocationService $locationService,
+        private readonly LocationService $locationService,
     )
     {
     }
     #[Route('/{page}', name: 'list', requirements: ['page' => '\d+'])]
     public function index(LocationRepository $locationRepository, int $page = 1): Response
     {
-        $limit = 10;
+        $limit = 9;
 
         $locations = $locationRepository->findAllPaginated($page, $limit);
         $total = $locationRepository->countAll();

@@ -30,7 +30,7 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
             ->getRepository(Location::class)
             ->findAll();
 
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 200; $i++) {
 
             $event = new Event();
 
@@ -94,6 +94,10 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
             $randomParticipants = $faker->randomElements(
                 $participants,
                 rand(2, 8)
+            );
+
+            $event->setPrivate(
+                $faker->boolean(50)
             );
 
             foreach ($randomParticipants as $participant) {

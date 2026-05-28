@@ -120,7 +120,6 @@
 
         {% if totalPages is defined and totalPages > 1 %}
             <div class="d-flex flex-wrap align-items-center justify-content-center gap-2 mt-4">
-
                 {% if currentPage > 1 %}
                     <a href="{{ path('app_admin_users', { page: currentPage - 1 }) }}"
                        class="btn btn-outline-primary btn-sm rounded-pill px-3">
@@ -132,7 +131,7 @@
                     </button>
                 {% endif %}
 
-                 Liste des pages
+                Liste des pages
                 {% for p in 1..totalPages %}
                     {% if p == 2 and currentPage > 4 %}
                         <span class="text-muted px-1">…</span>
@@ -153,17 +152,21 @@
                 {% endfor %}
 
                 {% if currentPage < totalPages %}
+
                     <a href="{{ path('app_admin_users', { page: currentPage + 1 }) }}"
                        class="btn btn-outline-primary btn-sm rounded-pill px-3">
                         Suivant <i class="fas fa-chevron-right ms-1"></i>
                     </a>
+
                 {% else %}
+
                     <button class="btn btn-outline-secondary btn-sm rounded-pill px-3" disabled>
                         Suivant <i class="fas fa-chevron-right ms-1"></i>
                     </button>
-                {% endif %}
 
+                {% endif %}
             </div>
         {% endif %}
+
     </div>
 {% endblock %}

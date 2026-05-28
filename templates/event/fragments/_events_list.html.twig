@@ -1,0 +1,74 @@
+{% block events_list %}
+    {% if events is empty %}
+        <div class="text-center py-5 text-muted">
+            <i class="fas fa-calendar-xmark fa-3x mb-3"></i>
+            <p class="mb-0">Aucun événement disponible</p>
+        </div>
+    {% else %}
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for event in events %}
+                <div class="col">
+                    <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
+                        <div class="position-relative">
+                            <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/042.webp"
+                                 class="card-img-top"
+                                 style="height: 180px; object-fit: cover;"
+                                 alt="event image">
+
+                            <div class="position-absolute top-0 start-0 m-2 d-flex align-items-center gap-2 bg-dark bg-opacity-50 text-white px-2 py-1 rounded-pill">
+                                <a href="{{ path('app_user_other_profil', { username: event.organiser.username }) }}"
+                                   class="text-decoration-none text-white d-flex align-items-center gap-2">
+                                    <img src="{{ event.organiser.img ? asset('img/profil/' ~ event.organiser.img) : asset('img/avatar-random.png') }}"
+                                         class="rounded-circle border border-white"
+                                         width="40"
+                                         height="40"
+                                         alt="user avatar">
+                                    <span class="small fw-semibold">{{ event.organiser.username }}</span>
+                                </a>
+                            </div>
+
+                            <span class="badge bg-primary position-absolute top-0 end-0 m-2 px-3 py-2 rounded-pill">
+                                <i class="fas fa-calendar-day me-1"></i>
+                                {{ event.dateTimeStart|date('d/m') }}
+                            </span>
+                        </div>
+
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <h5 class="fw-bold mb-0">{{ event.title }}</h5>
+                                <span class="badge bg-{{ event.state.color() }} rounded-pill ms-2">
+                                    {{ event.state.value }}
+                                </span>
+                            </div>
+
+                            <div class="d-flex flex-wrap gap-2 mb-3">
+                                <span class="badge bg-light text-dark border">
+                                    <i class="fas fa-users me-1"></i>
+                                    {{ event.nbParticipants }} participants
+                                </span>
+                                <span class="badge bg-light text-dark border">
+                                    <i class="fas fa-clock me-1"></i>
+                                    Durée {{ event.duration|date('%h h %i') }}
+                                </span>
+                                <span class="badge bg-info text-dark rounded-pill px-3">
+                                    <i class="fas fa-school me-1"></i>
+                                    Campus {{ event.site.name }}
+                                </span>
+                            </div>
+
+                            <div class="text-end text-muted small mb-3">
+                                <i class="fas fa-hourglass-end me-1"></i>
+                                Inscription jusqu'au {{ event.dateLimitRegistration|date('d/m/Y') }}
+                            </div>
+
+                            <a href="{{ path('app_event', {'id': event.id}) }}"
+                               class="btn btn-primary w-100 rounded-3 fw-semibold">
+                                <i class="fas fa-eye me-1"></i> Voir les détails
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

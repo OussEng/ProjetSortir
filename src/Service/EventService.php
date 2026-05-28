@@ -10,18 +10,21 @@ use App\Repository\EventRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 
 class EventService{
-    public function __construct(private EventRepository $eventRepository, private Security $security){
+    public function __construct(private readonly EventRepository $eventRepository,
+                                private readonly Security        $security){
     }
 
-    public function getAllEvents(){
+    public function getAllEvents(): array
+    {
         return $this->eventRepository->findAll();
     }
 
-    public function getEvent(int $id){
+    public function getEvent(int $id): Event|null
+    {
         return $this->eventRepository->find($id);
     }
 
-    public function getEventBySite(Site $site)
+    public function getEventBySite(Site $site): array
     {
         return $this->eventRepository->findBy([
             'site' => $site
@@ -55,12 +58,50 @@ class EventService{
         $this->eventRepository->save($event);
     }
 
-    public function getEventByOrganiserId(int $id){
+    public function getEventByOrganiserId(int $id): array{
         return $this->eventRepository->findAllEventByOrganiserId($id);
     }
 
-public function create(Event $event): void{
+    public function create(Event $event): void{
+            $this->eventRepository->save($event);
+    }
+
+    public function getEventsByUserParticipated(Participant $participant, int $page, int $limit): array{
+        return $this->eventRepository->findEventsByUserParticipated($participant, $page, $limit);
+    }
+
+    public function getFilteredPaginatedEvents(
+        string $search,
+        ?string $siteId,
+        ?string $state,
+        ?string $dateFrom,
+        ?string $dateTo,
+        bool $includePast,
+        bool $myEvents,
+        ?Participant $participant,
+        int $page,
+        int $limit ): array{
+        return $this->eventRepository->findFilteredPaginated(
+            $search,
+            $siteId,
+            $state,
+            $dateFrom,
+            $dateTo,
+            $includePast,
+            $participant,
+            $myEvents,
+            $page,
+            $limit,
+
+        );
+    }
+
+
+    public function publish(Event $event)
+    {
+        $event->setState(State::OPEN);
         $this->eventRepository->save($event);
-}
+    }
+
 
 }

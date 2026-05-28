@@ -89,7 +89,6 @@ final class AdminController extends AbstractController {
             }
         }
 
-
         return $this->render('admin/registerCsv.html.twig', [
             'form' => $form->createView(),
         ]);

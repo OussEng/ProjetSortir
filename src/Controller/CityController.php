@@ -12,26 +12,26 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/ville', name: 'app_city_')]
+#[Route('/villes', name: 'app_city_')]
 final class CityController extends AbstractController
 {
     public function __construct(
-        private CityService $cityService,
-        private CityRepository $cityRepository,
+        private readonly CityService    $cityService,
+        private readonly CityRepository $cityRepository,
     )
     {
     }
     #[Route('/{page}', name: 'list', requirements: ['page' => '\d+'])]
     public function index( int $page = 1): Response
     {
-        $limit = 10;
+        $limit = 9;
 
         $city = $this->cityRepository->findAllPaginated($page, $limit);
         $total = $this->cityRepository->countAll();
         $totalPages = ceil($total / $limit);
 
         return $this->render('city/listCity.html.twig', [
-            'city'   => $city,
+            'city'        => $city,
             'currentPage' => $page,
             'totalPages'  => $totalPages,
             'total'       => $total,

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Participant;
 use App\Form\ChangePasswordFormType;
 use App\Form\ProfileEditorType;
+use App\Repository\EventRepository;
 use App\Service\EventService;
 use App\Service\ParticipantService;
 use App\Utils\FileUploader;
@@ -19,11 +20,11 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class UserController extends AbstractController {
 
-    public function __construct(private readonly EntityManagerInterface $entityManager ,
+    public function __construct(private readonly EntityManagerInterface      $entityManager ,
                                 private readonly UserPasswordHasherInterface $passwordHasher,
-                                private FileUploader $fileUploader,
-                                private readonly ParticipantService $participantService,
-                                private readonly EventService $eventService){
+                                private readonly FileUploader                $fileUploader,
+                                private readonly ParticipantService          $participantService,
+                                private readonly EventService                $eventService){
     }
 
     #[Route('/profil', name: 'app_user')]
@@ -31,10 +32,11 @@ final class UserController extends AbstractController {
     {
         $user = $this->getUser();
         $events = $this->eventService->getEventByOrganiserId($user->getId());
-
+        $userParticipate = $this->eventService->getEventsByUserParticipated($user);
         return $this->render('user/profile.html.twig',[
             'user' => $user,
-            'events' => $events
+            'events' => $events,
+            'userParticipate' => $userParticipate
         ]);
     }
 
@@ -77,15 +79,26 @@ final class UserController extends AbstractController {
     }
 
     #[Route('/profil/{username}', name: 'app_user_other_profil')]
-    public function otherUserProfile(string $username): Response {
+    public function otherUserProfile(EventRepository $eventRepository,string $username, int $page = 1): Response {
 
         $user = $this->participantService->getOneParticipantByUsername($username);
         $events = $this->eventService->getEventByOrganiserId($user->getId());
-        //dd($events);
+
+        $limit = 9;
+
+        $userParticipate = $this->eventService->getEventsByUserParticipated($user, $page, $limit);
+
+        $total = $eventRepository->countAllEventCreated($user);
+        $totalPages = ceil($total / $limit);
 
         return $this->render('user/profile.html.twig',[
             'user' => $user,
-            'events' => $events
+            'events' => $events,
+            'userParticipate' => $userParticipate,
+            'currentPage' => $page,
+            'totalPages'  => $totalPages,
+            'total'       => $total
+
         ]);
     }
 
@@ -130,12 +143,34 @@ final class UserController extends AbstractController {
     }
 
     #[Route('/profil/sortie/{id}', name: 'app_user_events')]
-    public function allSortieUser(int $id): Response{
+    public function allSortieUser( int $id, int $page = 1): Response{
 
         $events = $this->eventService->getEventByOrganiserId($id);
 
+        $limit = 9;
+
         return $this->render('user/allSortie.html.twig',[
             'events' => $events
+        ]);
+    }
+
+    #[Route('/profil/{id}/participation/{page<\d+>?1}', name: 'app_user_events_participated')]
+    public function allUserParticipated(EventRepository $eventRepository, int $id, int $page = 1): Response{
+
+        $user = $this->participantService->getParticipant($id);
+
+        $limit = 9;
+
+        $events = $this->eventService->getEventsByUserParticipated($user, $page, $limit);
+        $total = $eventRepository->countAllEventParticipated($user);
+        $totalPages = ceil($total / $limit);
+
+
+        return $this->render('user/allUserParticipated.html.twig',[
+            'events' => $events,
+            'currentPage' => $page,
+            'totalPages'  => $totalPages,
+            'total'       => $total
         ]);
     }
 }
