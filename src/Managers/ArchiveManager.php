@@ -25,7 +25,7 @@ class ArchiveManager
     {
 
         $events = $this->eventRepository->findPast();
-        $now = new DateTimeImmutable('now', new DateTimeZone('Europe/Paris'));
+        $now = new DateTimeImmutable();
 
         foreach ($events as $event){
 

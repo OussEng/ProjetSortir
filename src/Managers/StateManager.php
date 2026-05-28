@@ -24,24 +24,30 @@ class StateManager
     public function handle(Event $event): void
     {
 
-        $now = new DateTimeImmutable('now', new DateTimeZone('Europe/Paris'));
+        $now = new DateTimeImmutable();
 
-            $end = $event->getDateTimeStart()->add($event->getDuration());
+        $end = $event->getDateTimeStart()->add($event->getDuration());
 
-            if ($event->getDateLimitRegistration() < $now) {
-                $event->setState(State::CLOSED);
-            }
+        if ($event->getDateLimitRegistration() < $now) {
 
-            if ($event->getDateTimeStart() <= $now) {
-                $event->setState(State::ON_GOING);
-            }
+            $event->setState(State::CLOSED);
+        }
 
-            if ($end <= $now) {
-                $event->setState(State::PAST);
-            }
+        if ($event->getDateTimeStart() <= $now) {
 
-            $this->entityManager->flush();
-            $this->entityManager->clear();
+            $event->setState(State::ON_GOING);
+
+        }
+
+        if ($end <= $now) {
+
+            $event->setState(State::PAST);
+
+        }
+
+
+        $this->entityManager->flush();
+        $this->entityManager->clear();
 
     }
 

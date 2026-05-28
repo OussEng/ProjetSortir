@@ -12,6 +12,8 @@ use App\Form\UpdateEventType;
 use App\Service\EventService;
 use App\Service\SiteService;
 use DateTime;
+use DateTimeImmutable;
+use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -90,7 +92,7 @@ final class EventController extends AbstractController {
     public function create(Request $request): Response
     {
 
-        $now = new DateTime('Europe/Paris');
+        $now = new DateTime();
 
 
         $event = new Event();
@@ -103,11 +105,23 @@ final class EventController extends AbstractController {
             $event = $eventForm->getData();
             $action = $request->request->get('action');
 
-            $event->setDateTimeStart($event->getDateTimeStart()->setTimezone(new \DateTimeZone('Europe/Paris')));
-            $event->setDateLimitRegistration($event->getDateLimitRegistration()->setTimezone(new \DateTimeZone('Europe/Paris')));
 
             $event->setSite($this->getUser()->getSite());
             $event->setOrganiser($this->getUser());
+
+            $dateTimeStart = new DateTimeImmutable(
+                $event->getDateTimeStart()->format('Y-m-d H:i:s'),
+                new DateTimeZone('Europe/Paris')
+            );
+
+            $dateLimit = new DateTimeImmutable(
+                $event->getDateLimitRegistration()->format('Y-m-d H:i:s'),
+                new DateTimeZone('Europe/Paris')
+            );
+
+
+            $event->setDateTimeStart($dateTimeStart->setTimezone(new DateTimeZone('UTC')));
+            $event->setDateLimitRegistration($dateLimit->setTimezone(new DateTimeZone('UTC')));
 
             if ($action === 'publish') {
                 $event->setState(State::OPEN);
@@ -149,7 +163,7 @@ final class EventController extends AbstractController {
     {
 
         $event = $this->eventService->getEvent($id);
-        $now = new DateTime('Europe/Paris');
+        $now = new DateTime();
 
         if ($event->getState() != State::OPEN) {
 
@@ -192,7 +206,7 @@ final class EventController extends AbstractController {
     #[Route('/desister/{id}', name: 'quit', requirements: ['id' => '\d+'])]
     public function quit(int $id): Response
     {
-        $now = new DateTime('Europe/Paris');
+        $now = new DateTime();
         $event = $this->eventService->getEvent($id);
 
         if ($event->getState() != State::OPEN) {
@@ -258,11 +272,12 @@ final class EventController extends AbstractController {
      * @param Request $request
      * @param int $id
      * @return Response
+     * @throws \Exception
      */
     #[Route('/{id}/modifier', name: 'event_update', requirements: ['id' => '\d+'])]
     public function update(Request $request, int $id): Response {
 
-        $now = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
+        $now = new DateTime();
 
         $event = $this->eventService->getEvent($id);
 
@@ -308,11 +323,14 @@ final class EventController extends AbstractController {
         ]);
     }
 
+    /**
+     * @throws \Exception
+     */
     #[Route('/publier/{id}', name: 'publish')]
     public function publish(int $id): Response
     {
         $event = $this->eventService->getEvent($id);
-        $now = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
+        $now = new DateTime();
 
         if (!$event) {
             $this->addFlash('danger', "La sortie est introuvable.");
