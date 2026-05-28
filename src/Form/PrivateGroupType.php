@@ -15,14 +15,11 @@ class PrivateGroupType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('organiser', EntityType::class, [
-                'class' => Participant::class,
-                'choice_label' => 'id',
-            ])
             ->add('members', EntityType::class, [
                 'class' => Participant::class,
-                'choice_label' => 'id',
+                'choice_label' => 'username',
                 'multiple' => true,
+                'expanded' => true,
             ])
         ;
     }

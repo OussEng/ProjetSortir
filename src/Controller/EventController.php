@@ -10,6 +10,7 @@ use App\Form\CancelReasonType;
 use App\Form\UpdateEventType;
 
 use App\Service\EventService;
+use App\Service\PrivateGroupService;
 use App\Service\SiteService;
 use DateTime;
 use DateTimeImmutable;
@@ -34,6 +35,7 @@ final class EventController extends AbstractController {
         private SiteService            $siteService,
         private EntityManagerInterface $entityManager,
         private MailerInterface $mailer,
+        private PrivateGroupService $privateGroupService,
     )
     {
     }
@@ -129,11 +131,25 @@ final class EventController extends AbstractController {
             $event->setDateTimeStart($dateTimeStart->setTimezone(new DateTimeZone('UTC')));
             $event->setDateLimitRegistration($dateLimit->setTimezone(new DateTimeZone('UTC')));
 
+
+            if ($eventForm->get('group')->getData()) {
+                $group = ($eventForm->get('group')->getData());
+                $pg = $this->privateGroupService->getById($group->getId());
+                foreach ($pg->getMembers() as $participant) {
+                    $event->addParticipant($participant);
+                }
+                if ($request->getSession()->get('is_mobile')) {
+                    throw $this->createAccessDeniedException("Création de sortie interdite sur mobile.");
+                }
+            }
+
+
             if ($action === 'publish') {
                 $event->setState(State::OPEN);
             } elseif ($action === 'save') {
                 $event->setState(State::CREATED);
             }
+
 
             if ($event->getDateTimeStart() < $now) {
                 $this->addFlash('danger', 'La date de début doit être dans le futur');

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 
 use App\Entity\PrivateGroup;
+use App\Form\PrivateGroupType;
 use App\Repository\PrivateGroupRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -43,7 +44,7 @@ final class PrivateGroupsController extends AbstractController
 
 
         $gp = new PrivateGroup();
-        $form = $this->createForm( PrivateGroup::class, $gp);
+        $form = $this->createForm( PrivateGroupType::class, $gp);
         $form->handleRequest($request);
 
         if (!$this->getUser()){
@@ -58,15 +59,14 @@ final class PrivateGroupsController extends AbstractController
             $this->entityManager->flush();
 
             $this->addFlash("success" , "Le groupe a bien été créé");
-            return $this->redirectToRoute('groupe_liste');
+            return $this->redirectToRoute('app_groupe_liste');
 
         }
         if ($request->getSession()->get('is_mobile')) {
             throw $this->createAccessDeniedException("Création de groupe interdite sur mobile.");
         }
 
-        return $this->render('groupe_prive/creer.html.twig', [
-            'controller_name' => 'GroupePriveController',
+        return $this->render('private_groups/create.html.twig', [
             'form' => $form
         ]);
     }
@@ -74,7 +74,7 @@ final class PrivateGroupsController extends AbstractController
     #[Route('/modifier/{id}', name: 'modifier')]
     public function modifier(Request $request, PrivateGroup $pg): Response
     {
-        $form = $this->createForm( PrivateGroup::class, $pg);
+        $form = $this->createForm( PrivateGroupType::class, $pg);
         $form->handleRequest($request);
 
         if (!$this->getUser()){
@@ -96,7 +96,7 @@ final class PrivateGroupsController extends AbstractController
 
         }
 
-        return $this->render('groupe_prive/creer.html.twig', [
+        return $this->render('private_groups/create.html.twig', [
             'controller_name' => 'GroupePriveController',
             'form' => $form
         ]);
@@ -111,7 +111,7 @@ final class PrivateGroupsController extends AbstractController
             $this->entityManager->flush();
 
             $this->addFlash("success" , "Le groupe a bien été supprimé");
-            return $this->redirectToRoute('groupe_liste');
+            return $this->redirectToRoute('app_groupe_liste');
         }
 
         return $this->render('groupe_prive/supprimer.html.twig', [
