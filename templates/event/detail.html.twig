@@ -160,6 +160,13 @@
                                 </div>
                             {% endif %}
 
+                            {% if event.isCreated() and event.organiser == app.user %}
+                                <a href="{{ path('app_publish', {'id': event.id}) }}"
+                                   class="btn btn-success btn-sm rounded-3 fw-semibold py-2 w-100 text-center">
+                                    Publiée
+                                </a>
+                            {% endif %}
+
                         </div>
                     </div>
                 </div>

@@ -223,4 +223,9 @@ class Event
         return $this->state === State::CANCELED;
     }
 
+    public function isCreated() : bool
+    {
+        return $this->state === State::CREATED;
+    }
+
 }

@@ -101,8 +101,19 @@ final class EventController extends AbstractController {
         if ($eventForm->isSubmitted() && $eventForm->isValid()) {
 
             $event = $eventForm->getData();
+            $action = $request->request->get('action');
+
+            $event->setDateTimeStart($event->getDateTimeStart()->setTimezone(new \DateTimeZone('Europe/Paris')));
+            $event->setDateLimitRegistration($event->getDateLimitRegistration()->setTimezone(new \DateTimeZone('Europe/Paris')));
+
             $event->setSite($this->getUser()->getSite());
             $event->setOrganiser($this->getUser());
+
+            if ($action === 'publish') {
+                $event->setState(State::OPEN);
+            } elseif ($action === 'save') {
+                $event->setState(State::CREATED);
+            }
 
             if ($event->getDateTimeStart() < $now) {
                 $this->addFlash('danger', 'La date de début doit être dans le futur');
@@ -260,6 +271,11 @@ final class EventController extends AbstractController {
             return $this->redirectToRoute('app_home');
         }
 
+        if ($event->getOrganiser() !== $this->getUser()) {
+            $this->addFlash('danger', "La sortie est introuvable.");
+            return $this->redirectToRoute('app_home');
+        }
+
         $eventForm = $this->createForm(UpdateEventType::class, $event);
         $eventForm->handleRequest($request);
 
@@ -291,4 +307,43 @@ final class EventController extends AbstractController {
             'event' => $event
         ]);
     }
+
+    #[Route('/publier/{id}', name: 'publish')]
+    public function publish(int $id): Response
+    {
+        $event = $this->eventService->getEvent($id);
+        $now = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
+
+        if (!$event) {
+            $this->addFlash('danger', "La sortie est introuvable.");
+        }
+
+        if ($event->getOrganiser() !== $this->getUser()) {
+            $this->addFlash('danger', "Vous n'êtes pas l'organisateur de cette sortie");
+            return $this->redirectToRoute('app_event', ['id' => $id]);
+        }
+
+        if ($event->getDateTimeStart() < $now) {
+            $this->addFlash('danger', 'La date de début doit être dans le futur');
+            return $this->redirectToRoute('event_update', ['id' => $id]);
+        }
+
+        if ($event->getDateLimitRegistration() < $now) {
+            $this->addFlash('danger', "La date limite d'inscription doit être dans le futur");
+            return $this->redirectToRoute('event_update', ['id' => $id]);
+        }
+
+        if ($event->getDateLimitRegistration() > $event->getDateTimeStart()) {
+            $this->addFlash('danger', "La date limite d'inscription doit être avant la date de début");
+            return $this->redirectToRoute('event_update', ['id' => $id]);
+        }
+
+        $this->eventService->publish($event);
+        $this->addFlash('success', 'La sortie a été publiée avec succès');
+
+        return $this->redirectToRoute('app_event', ['id' => $id]);
+
+    }
+
+
 }
