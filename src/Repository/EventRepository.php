@@ -4,21 +4,23 @@ namespace App\Repository;
 
 use App\Entity\Event;
 use App\Entity\Participant;
-use App\Entity\Site;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<Event>
  */
-class EventRepository extends ServiceEntityRepository{
-    public function __construct(ManagerRegistry $registry){
+class EventRepository extends ServiceEntityRepository
+{
+    public function __construct(ManagerRegistry $registry)
+    {
         parent::__construct($registry, Event::class);
     }
 
-    public function findAllEventByOrganiserId(int $id): array {
-        return $query = $this->createQueryBuilder('e')
-            ->Select('e')
+    public function findAllEventByOrganiserId(int $id): array
+    {
+        return $this->createQueryBuilder('e')
+            ->select('e')
             ->andWhere('e.organiser = :id')
             ->setParameter('id', $id)
             ->addOrderBy('e.dateTimeStart', 'DESC')
@@ -49,10 +51,18 @@ class EventRepository extends ServiceEntityRepository{
 
         $qb = $this->createQueryBuilder('e')
             ->join('e.site', 's')
-            ->addSelect('s');
+            ->join('e.organiser', 'o')
+            ->addSelect('s', 'o');
 
         if (!empty($search)) {
-            $qb->andWhere('(e.title LIKE :search OR e.eventDescription LIKE :search)')
+            $qb->andWhere('(
+                e.title LIKE :search OR
+                e.eventDescription LIKE :search OR
+                o.username LIKE :search OR
+                o.firstname LIKE :search OR
+                o.lastname LIKE :search OR
+                s.name LIKE :search
+            )')
                 ->setParameter('search', '%' . $search . '%');
         }
 
@@ -76,7 +86,10 @@ class EventRepository extends ServiceEntityRepository{
                 ->setParameter('dateTo', new \DateTime($dateTo . ' 23:59:59'));
         }
 
-        if (!$includePast) {
+        if ($includePast) {
+            $qb->andWhere('e.dateTimeStart < :today')
+                ->setParameter('today', new \DateTime('today'));
+        } else {
             $qb->andWhere('e.dateTimeStart >= :today')
                 ->setParameter('today', new \DateTime('today'));
         }
@@ -89,10 +102,18 @@ class EventRepository extends ServiceEntityRepository{
 
         $countQb = $this->createQueryBuilder('e')
             ->select('COUNT(DISTINCT e.id)')
-            ->join('e.site', 's');
+            ->join('e.site', 's')
+            ->join('e.organiser', 'o');
 
         if (!empty($search)) {
-            $countQb->andWhere('(e.title LIKE :search OR e.eventDescription LIKE :search)')
+            $countQb->andWhere('(
+                e.title LIKE :search OR
+                e.eventDescription LIKE :search OR
+                o.username LIKE :search OR
+                o.firstname LIKE :search OR
+                o.lastname LIKE :search OR
+                s.name LIKE :search
+            )')
                 ->setParameter('search', '%' . $search . '%');
         }
 
@@ -117,10 +138,10 @@ class EventRepository extends ServiceEntityRepository{
         }
 
         if ($includePast) {
-            $qb->andWhere('e.dateTimeStart < :today')
+            $countQb->andWhere('e.dateTimeStart < :today')
                 ->setParameter('today', new \DateTime('today'));
         } else {
-            $qb->andWhere('e.dateTimeStart >= :today')
+            $countQb->andWhere('e.dateTimeStart >= :today')
                 ->setParameter('today', new \DateTime('today'));
         }
 
