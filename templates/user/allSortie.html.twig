@@ -37,7 +37,7 @@
                             <a href="{{ path('app_user_other_profil', { username : event.organiser.username}) }}"
                                class="text-decoration-none text-white d-flex align-items-center gap-2">
 
-                                <img src="{{ event.organiser.img is not null ? event.organiser.img : asset('img/avatar-random.png') }}"
+                                <img src="{{ event.organiser.img is not null ? asset('img/profil/' ~ event.organiser.img) : asset('img/avatar-random.png') }}"
                                      class="rounded-circle border border-white"
                                      width="30"
                                      height="30"
@@ -93,12 +93,13 @@
                                 <i class="fas fa-eye me-1"></i>
                                 Voir les détails
                             </a>
-
-                            <a href="{{ path('app_event_update', {'id': event.id }) }}"
-                               class="btn btn-warning rounded-3 fw-semibold flex-fill">
-                                <i class="fas fa-pen me-1"></i>
-                                Modifier
-                            </a>
+                            {%  if app.user == event.organiser %}
+                                <a href="{{ path('app_event_update', {'id': event.id }) }}"
+                                   class="btn btn-warning rounded-3 fw-semibold flex-fill">
+                                    <i class="fas fa-pen me-1"></i>
+                                    Modifier
+                                </a>
+                            {% endif %}
                         </div>
 
                     </div>
