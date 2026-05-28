@@ -136,10 +136,13 @@ final class EventController extends AbstractController {
                 $pg = $this->privateGroupService->getById($group->getId());
                 foreach ($pg->getMembers() as $participant) {
                     $event->addParticipant($participant);
+                    $event->setPrivate(true);
                 }
                 if ($request->getSession()->get('is_mobile')) {
                     throw $this->createAccessDeniedException("Création de sortie interdite sur mobile.");
                 }
+            }else{
+                $event->setPrivate(false);
             }
 
 
