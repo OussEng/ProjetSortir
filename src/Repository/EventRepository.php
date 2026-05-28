@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\Event;
 use App\Entity\Participant;
+use App\Entity\Site;
+use App\Enum\State;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -166,4 +168,36 @@ class EventRepository extends ServiceEntityRepository
             'totalItems' => $total
         ];
     }
+
+
+    /**
+     * @return Event[]
+     */
+    public function findActive(): array
+    {
+        return $this->createQueryBuilder('e')
+            ->where('e.state NOT IN (:states)')
+            ->setParameter('states', [State::CANCELED, State::ARCHIVED, State::CREATED])
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return Event[]
+     */
+    public function findPast(): array
+    {
+        return $this->createQueryBuilder('e')
+            ->where('e.state IN (:state)')
+            ->setParameter('state', [State::PAST])
+            ->getQuery()
+            ->getResult();
+    }
+
+
+
+
+
+
+
 }

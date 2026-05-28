@@ -18,7 +18,7 @@ class MobileListener
 
 
         if ($this->isMobile($userAgent) && in_array($currentRoute,
-                ['app_create'],
+                ['app_create', 'app_groupe_create'] ,
                 true))
         {
             $response = new Response("Accès interdit depuis un smartphone.", Response::HTTP_FORBIDDEN);

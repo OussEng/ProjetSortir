@@ -4,25 +4,40 @@ namespace App\Controller;
 
 use App\Entity\Event;
 use App\Enum\State;
+
+use App\Form\EventType;
 use App\Form\CancelReasonType;
 use App\Form\UpdateEventType;
+
 use App\Service\EventService;
+use App\Service\PrivateGroupService;
 use App\Service\SiteService;
 use DateTime;
+use DateTimeImmutable;
+use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Attribute\Route;
+
 
 #[Route('/sortie', name: 'app_')]
 
 final class EventController extends AbstractController {
 
     public function __construct(
-        private readonly EventService           $eventService,
-        private readonly SiteService            $siteService,
-        private readonly EntityManagerInterface $entityManager){
+        private EventService           $eventService,
+        private SiteService            $siteService,
+        private EntityManagerInterface $entityManager,
+        private MailerInterface $mailer,
+        private PrivateGroupService $privateGroupService,
+    )
+    {
     }
 
     #[Route('', name: 'events')]
@@ -85,7 +100,7 @@ final class EventController extends AbstractController {
     public function create(Request $request): Response
     {
 
-        $now = new DateTime('Europe/Paris');
+        $now = new DateTime();
 
 
         $event = new Event();
@@ -96,8 +111,45 @@ final class EventController extends AbstractController {
         if ($eventForm->isSubmitted() && $eventForm->isValid()) {
 
             $event = $eventForm->getData();
+            $action = $request->request->get('action');
+
+
             $event->setSite($this->getUser()->getSite());
             $event->setOrganiser($this->getUser());
+
+            $dateTimeStart = new DateTimeImmutable(
+                $event->getDateTimeStart()->format('Y-m-d H:i:s'),
+                new DateTimeZone('Europe/Paris')
+            );
+
+            $dateLimit = new DateTimeImmutable(
+                $event->getDateLimitRegistration()->format('Y-m-d H:i:s'),
+                new DateTimeZone('Europe/Paris')
+            );
+
+
+            $event->setDateTimeStart($dateTimeStart->setTimezone(new DateTimeZone('UTC')));
+            $event->setDateLimitRegistration($dateLimit->setTimezone(new DateTimeZone('UTC')));
+
+
+            if ($eventForm->get('group')->getData()) {
+                $group = ($eventForm->get('group')->getData());
+                $pg = $this->privateGroupService->getById($group->getId());
+                foreach ($pg->getMembers() as $participant) {
+                    $event->addParticipant($participant);
+                }
+                if ($request->getSession()->get('is_mobile')) {
+                    throw $this->createAccessDeniedException("Création de sortie interdite sur mobile.");
+                }
+            }
+
+
+            if ($action === 'publish') {
+                $event->setState(State::OPEN);
+            } elseif ($action === 'save') {
+                $event->setState(State::CREATED);
+            }
+
 
             if ($event->getDateTimeStart() < $now) {
                 $this->addFlash('danger', 'La date de début doit être dans le futur');
@@ -125,12 +177,15 @@ final class EventController extends AbstractController {
         ]);
     }
 
+    /**
+     * @throws TransportExceptionInterface
+     */
     #[Route('/inscrire/sortie/{id}', name: 'participate', requirements: ['id' => '\d+'])]
     public function participate(int $id): Response
     {
 
         $event = $this->eventService->getEvent($id);
-        $now = new DateTime('Europe/Paris');
+        $now = new DateTime();
 
         if ($event->getState() != State::OPEN) {
 
@@ -154,6 +209,18 @@ final class EventController extends AbstractController {
         $this->eventService->participate($id);
         $this->addFlash('success', 'Vous êtes inscrit à cette sortie');
 
+        $email = (new TemplatedEmail())
+            ->from(new Address('notification@sortir.com', 'Sortir.com'))
+            ->to((string) $this->getUser()->getEmail())
+            ->subject('Vous êtes inscrit à une sortie')
+            ->htmlTemplate('event/email.html.twig')
+            ->context([
+                'event' => $event,
+            ])
+        ;
+
+        $this->mailer->send($email);
+
         return $this->redirectToRoute('app_event', ['id' => $id]);
 
     }
@@ -161,7 +228,7 @@ final class EventController extends AbstractController {
     #[Route('/desister/{id}', name: 'quit', requirements: ['id' => '\d+'])]
     public function quit(int $id): Response
     {
-        $now = new DateTime('Europe/Paris');
+        $now = new DateTime();
         $event = $this->eventService->getEvent($id);
 
         if ($event->getState() != State::OPEN) {
@@ -227,15 +294,21 @@ final class EventController extends AbstractController {
      * @param Request $request
      * @param int $id
      * @return Response
+     * @throws \Exception
      */
     #[Route('/{id}/modifier', name: 'event_update', requirements: ['id' => '\d+'])]
     public function update(Request $request, int $id): Response {
 
-        $now = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
+        $now = new DateTime();
 
         $event = $this->eventService->getEvent($id);
 
         if (!$event) {
+            $this->addFlash('danger', "La sortie est introuvable.");
+            return $this->redirectToRoute('app_home');
+        }
+
+        if ($event->getOrganiser() !== $this->getUser()) {
             $this->addFlash('danger', "La sortie est introuvable.");
             return $this->redirectToRoute('app_home');
         }
@@ -271,4 +344,46 @@ final class EventController extends AbstractController {
             'event' => $event
         ]);
     }
+
+    /**
+     * @throws \Exception
+     */
+    #[Route('/publier/{id}', name: 'publish')]
+    public function publish(int $id): Response
+    {
+        $event = $this->eventService->getEvent($id);
+        $now = new DateTime();
+
+        if (!$event) {
+            $this->addFlash('danger', "La sortie est introuvable.");
+        }
+
+        if ($event->getOrganiser() !== $this->getUser()) {
+            $this->addFlash('danger', "Vous n'êtes pas l'organisateur de cette sortie");
+            return $this->redirectToRoute('app_event', ['id' => $id]);
+        }
+
+        if ($event->getDateTimeStart() < $now) {
+            $this->addFlash('danger', 'La date de début doit être dans le futur');
+            return $this->redirectToRoute('event_update', ['id' => $id]);
+        }
+
+        if ($event->getDateLimitRegistration() < $now) {
+            $this->addFlash('danger', "La date limite d'inscription doit être dans le futur");
+            return $this->redirectToRoute('event_update', ['id' => $id]);
+        }
+
+        if ($event->getDateLimitRegistration() > $event->getDateTimeStart()) {
+            $this->addFlash('danger', "La date limite d'inscription doit être avant la date de début");
+            return $this->redirectToRoute('event_update', ['id' => $id]);
+        }
+
+        $this->eventService->publish($event);
+        $this->addFlash('success', 'La sortie a été publiée avec succès');
+
+        return $this->redirectToRoute('app_event', ['id' => $id]);
+
+    }
+
+
 }
