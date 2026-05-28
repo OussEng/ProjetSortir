@@ -41,6 +41,7 @@ class StateManager
             }
 
             $this->entityManager->flush();
+            $this->entityManager->clear();
 
     }
 

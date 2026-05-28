@@ -98,10 +98,17 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinColumn(nullable: false)]
     private ?Site $site = null;
 
+    /**
+     * @var Collection<int, PrivateGroup>
+     */
+    #[ORM\OneToMany(targetEntity: PrivateGroup::class, mappedBy: 'organiser')]
+    private Collection $privateGroups;
+
     public function __construct()
     {
         $this->organisedEvents = new ArrayCollection();
         $this->events = new ArrayCollection();
+        $this->privateGroups = new ArrayCollection();
     }
 
 
@@ -324,6 +331,36 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     public function setSite(?Site $site): static
     {
         $this->site = $site;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PrivateGroup>
+     */
+    public function getPrivateGroups(): Collection
+    {
+        return $this->privateGroups;
+    }
+
+    public function addPrivateGroup(PrivateGroup $privateGroup): static
+    {
+        if (!$this->privateGroups->contains($privateGroup)) {
+            $this->privateGroups->add($privateGroup);
+            $privateGroup->setOrganiser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePrivateGroup(PrivateGroup $privateGroup): static
+    {
+        if ($this->privateGroups->removeElement($privateGroup)) {
+            // set the owning side to null (unless already changed)
+            if ($privateGroup->getOrganiser() === $this) {
+                $privateGroup->setOrganiser(null);
+            }
+        }
 
         return $this;
     }

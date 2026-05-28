@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Groupes{% endblock %}
+
+{% block body %}
+<div class="container py-4">
+    <div class="card" style="background: #f8f4f0; border-radius: 15px; box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);">
+        <div class="card-body">
+            <div class="d-flex justify-content-center mb-4">
+                {% if app.user %}
+                <h1 class="mb-0 position-relative" style="color: #444; padding-bottom: 12px;">
+                    Hello {{ app.user.username }}! ✅</h1>
+                {% endif %}
+            </div>
+            <hr style="width: 100%; height: 3px; background: #96CEB4; border-radius: 3px;">
+            <br>
+            <h2 class="text-center m-3">Mes Groupes Privés</h2>
+
+            {% if groupes|length == 0 %}
+            <div class="text-center m-3">
+                <p>Vous n'avez aucun groupe privé</p>
+                <p>Cliquez sur le lien pour créer un groupe privé</p>
+                <div class="d-flex justify-content-center mt-3">
+                    <a href="{{ path('app_groupe_creer') }}" class="btn justify-content-center w-30"
+                       style="background-color: #FFCB77; color: black; font-weight: 600; border: none; padding: 10px 50px; border-radius: 8px;">
+                        Créer un Groupe</a>
+                </div>
+            </div>
+            {% endif %}
+
+            {% for groupe in groupes %}
+            <div class="mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h3 style="color: #444;">Groupe : {{ groupe.name }}</h3>
+                    <div>
+                        <a class="btn" href="{{ path('app_groupe_modifier',{'id':groupe.id}) }}"
+                           style="background-color: #96CEB4; color: black; font-weight: 600; border: none; border-radius: 8px;">
+                            Modifier</a>
+                        <a class="btn" href="{{ path('app_groupe_supprimer',{'id':groupe.id}) }}"
+                           style="background-color: #D7816A; color: white; font-weight: 600; border: none; border-radius: 8px;">
+                            Supprimer</a>
+                    </div>
+                </div>
+                <table class="table" style="background: white; border-radius: 10px; overflow: hidden;">
+                    <thead>
+                    <tr style="background: #f0e9e1;">
+                        <th scope="col">#</th>
+                        <th scope="col">Pseudo</th>
+                        <th scope="col">Nom</th>
+                        <th scope="col">Prenom</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for key, membre in groupe.members %}
+                    <tr>
+                        <th>{{ key+1 }}</th>
+                        <th scope="row">{{ membre.pseudo }}</th>
+                        <td>{{ membre.nom }}</td>
+                        <td>{{ membre.prenom }}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
