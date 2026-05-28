@@ -42,7 +42,7 @@ class Event
     private ?Participant $organiser = null;
 
     /**
-     * @var Collection<int, participant>
+     * @var Collection<int, Participant>
      */
     #[ORM\ManyToMany(targetEntity: Participant::class, inversedBy: 'events')]
     private Collection $participants;
@@ -54,6 +54,9 @@ class Event
     #[ORM\ManyToOne(inversedBy: 'events')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Location $location = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $private = null;
 
     public function __construct()
     {
@@ -212,6 +215,13 @@ class Event
         return $this;
     }
 
+    public function setPrivate(?bool $private): static
+    {
+        $this->private = $private;
+
+        return $this;
+    }
+
     public function isOpen() : bool
     {
         return $this->state === State::OPEN;
@@ -222,5 +232,17 @@ class Event
     {
         return $this->state === State::CANCELED;
     }
+
+    public function isCreated() : bool
+    {
+        return $this->state === State::CREATED;
+    }
+
+    public function isPrivate(): ?bool
+    {
+        return $this->private;
+    }
+
+
 
 }

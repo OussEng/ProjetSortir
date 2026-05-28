@@ -95,4 +95,13 @@ class EventService{
 
         );
     }
+
+
+    public function publish(Event $event)
+    {
+        $event->setState(State::OPEN);
+        $this->eventRepository->save($event);
+    }
+
+
 }

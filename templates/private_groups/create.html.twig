@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un groupe{% endblock %}
+
+{% block body %}
+
+    <div class=" bg-light-subtle container card card-body mt-3">
+        {{ form_errors(form) }}
+        {{ form_start(form) }}
+        {{ form_row(form.name) }}
+        {{ form_row(form.members, {'attr': {'class': 'row row-cols-1 row-cols-sm-2 row-cols-md-4 m-3'}}) }}
+        <button  type="submit" class="btn btn-info w-100">Enregistrer</button>
+        {{ form_end(form) }}
+    </div>
+
+{% endblock %}
+
+
