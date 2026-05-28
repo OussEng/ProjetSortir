@@ -9,7 +9,6 @@
 
                 <div class="text-primary display-1 fw-bold mb-3">
                     <i class="fa-solid fa-triangle-exclamation text-primary mb-2"></i><br>
-                    {# On affiche le vrai code erreur (ex: 500) si disponible, sinon juste "Oups" #}
                     {{ status_code is defined ? status_code : 'Oups' }}
                 </div>
 
