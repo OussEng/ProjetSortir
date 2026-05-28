@@ -19,11 +19,11 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class UserController extends AbstractController {
 
-    public function __construct(private readonly EntityManagerInterface $entityManager ,
+    public function __construct(private readonly EntityManagerInterface      $entityManager ,
                                 private readonly UserPasswordHasherInterface $passwordHasher,
-                                private FileUploader $fileUploader,
-                                private readonly ParticipantService $participantService,
-                                private readonly EventService $eventService){
+                                private readonly FileUploader                $fileUploader,
+                                private readonly ParticipantService          $participantService,
+                                private readonly EventService                $eventService){
     }
 
     #[Route('/profil', name: 'app_user')]
@@ -31,10 +31,11 @@ final class UserController extends AbstractController {
     {
         $user = $this->getUser();
         $events = $this->eventService->getEventByOrganiserId($user->getId());
-
+        $userParticipate = $this->eventService->getEventsByUserParticipated($user);
         return $this->render('user/profile.html.twig',[
             'user' => $user,
-            'events' => $events
+            'events' => $events,
+            'userParticipate' => $userParticipate
         ]);
     }
 
@@ -81,11 +82,13 @@ final class UserController extends AbstractController {
 
         $user = $this->participantService->getOneParticipantByUsername($username);
         $events = $this->eventService->getEventByOrganiserId($user->getId());
-        //dd($events);
+        $userParticipate = $this->eventService->getEventsByUserParticipated($user);
 
         return $this->render('user/profile.html.twig',[
             'user' => $user,
-            'events' => $events
+            'events' => $events,
+            'userParticipate' => $userParticipate
+
         ]);
     }
 
@@ -135,6 +138,17 @@ final class UserController extends AbstractController {
         $events = $this->eventService->getEventByOrganiserId($id);
 
         return $this->render('user/allSortie.html.twig',[
+            'events' => $events
+        ]);
+    }
+
+    #[Route('/profil/{id}/participation', name: 'app_user_events_participated')]
+    public function allUserParticipated(int $id): Response{
+
+        $user = $this->participantService->getParticipant($id);
+        $events = $this->eventService->getEventsByUserParticipated($user);
+
+        return $this->render('user/allUserParticipated.html.twig',[
             'events' => $events
         ]);
     }

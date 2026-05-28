@@ -15,14 +15,14 @@ use Symfony\Component\Routing\Attribute\Route;
 final class LocationController extends AbstractController
 {
     public function __construct(
-        private LocationService $locationService,
+        private readonly LocationService $locationService,
     )
     {
     }
     #[Route('/{page}', name: 'list', requirements: ['page' => '\d+'])]
     public function index(LocationRepository $locationRepository, int $page = 1): Response
     {
-        $limit = 10;
+        $limit = 9;
 
         $locations = $locationRepository->findAllPaginated($page, $limit);
         $total = $locationRepository->countAll();

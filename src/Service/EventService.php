@@ -10,7 +10,8 @@ use App\Repository\EventRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 
 class EventService{
-    public function __construct(private readonly EventRepository $eventRepository, private readonly Security $security){
+    public function __construct(private readonly EventRepository $eventRepository,
+                                private readonly Security        $security){
     }
 
     public function getAllEvents(): array
@@ -57,7 +58,7 @@ class EventService{
         $this->eventRepository->save($event);
     }
 
-    public function getEventByOrganiserId(int $id){
+    public function getEventByOrganiserId(int $id): array{
         return $this->eventRepository->findAllEventByOrganiserId($id);
     }
 
@@ -65,21 +66,9 @@ class EventService{
             $this->eventRepository->save($event);
     }
 
-//    public function getFilteredPaginatedEvents(
-//        string $search,
-//        string $siteId,
-//        string $state,
-//        int $page,
-//        int $limit ): array {
-//
-//        return $this->eventRepository->findFilteredPaginated(
-//            $search,
-//            $siteId,
-//            $state,
-//            $page,
-//            $limit
-//        );
-//    }
+    public function getEventsByUserParticipated(Participant $participant): array{
+        return $this->eventRepository->findEventsByUserParticipated($participant);
+    }
 
     public function getFilteredPaginatedEvents(
         string $search,
@@ -113,5 +102,6 @@ class EventService{
         $event->setState(State::OPEN);
         $this->eventRepository->save($event);
     }
+
 
 }

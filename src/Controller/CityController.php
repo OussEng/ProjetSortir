@@ -16,15 +16,15 @@ use Symfony\Component\Routing\Attribute\Route;
 final class CityController extends AbstractController
 {
     public function __construct(
-        private CityService $cityService,
-        private CityRepository $cityRepository,
+        private readonly CityService    $cityService,
+        private readonly CityRepository $cityRepository,
     )
     {
     }
     #[Route('/{page}', name: 'list', requirements: ['page' => '\d+'])]
     public function index( int $page = 1): Response
     {
-        $limit = 10;
+        $limit = 9;
 
         $city = $this->cityRepository->findAllPaginated($page, $limit);
         $total = $this->cityRepository->countAll();
