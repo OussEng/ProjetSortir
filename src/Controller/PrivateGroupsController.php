@@ -38,8 +38,8 @@ final class PrivateGroupsController extends AbstractController
         ]);
     }
 
-    #[Route('/creer', name: 'creer')]
-    public function creer(Request $request): Response
+    #[Route('/creer', name: 'create')]
+    public function create(Request $request): Response
     {
 
 
@@ -62,17 +62,15 @@ final class PrivateGroupsController extends AbstractController
             return $this->redirectToRoute('app_groupe_liste');
 
         }
-        if ($request->getSession()->get('is_mobile')) {
-            throw $this->createAccessDeniedException("Création de groupe interdite sur mobile.");
-        }
+
 
         return $this->render('private_groups/create.html.twig', [
             'form' => $form
         ]);
     }
 
-    #[Route('/modifier/{id}', name: 'modifier')]
-    public function modifier(Request $request, PrivateGroup $pg): Response
+    #[Route('/modifier/{id}', name: 'edit')]
+    public function edit(Request $request, PrivateGroup $pg): Response
     {
         $form = $this->createForm( PrivateGroupType::class, $pg);
         $form->handleRequest($request);
@@ -102,7 +100,7 @@ final class PrivateGroupsController extends AbstractController
         ]);
     }
 
-    #[Route('/supprimer/{id}', name: 'supprimer')]
+    #[Route('/supprimer/{id}', name: 'delete')]
     public function delete(PrivateGroup $pg): Response
     {
 
@@ -114,8 +112,7 @@ final class PrivateGroupsController extends AbstractController
             return $this->redirectToRoute('app_groupe_liste');
         }
 
-        return $this->render('groupe_prive/supprimer.html.twig', [
-        ]);
+        return $this->redirectToRoute('app_groupe_liste');
     }
 
 }
