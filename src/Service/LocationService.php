@@ -14,6 +14,11 @@ class LocationService
     {
     }
 
+    public function getOneLocation(int $id)
+    {
+        return $this->locationRepository->find($id);
+    }
+
     public function create(Location $location): void{
     {
         $this->locationRepository->save($location);

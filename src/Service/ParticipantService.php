@@ -23,6 +23,15 @@ readonly class ParticipantService {
     }
 
     /**
+     * @param int $id
+     * @return Participant|null
+     */
+    public function getOneParticipant(int $id): Participant|null
+    {
+        return $this->participantRepository->find($id);
+    }
+
+    /**
      * @return Participant[]|array|object[]
      */
     public function getParticipants(): array

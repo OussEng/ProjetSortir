@@ -9,6 +9,10 @@ class SiteService {
     public function __construct(private SiteRepository $siteRepository){
     }
 
+    public function getOneSite(int $id){
+        return $this->siteRepository->find($id);
+    }
+
     public function getAllSites(){
         return $this->siteRepository->findAll();
     }
