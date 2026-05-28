@@ -54,17 +54,21 @@ class EventRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('e')
             ->join('e.site', 's')
             ->join('e.organiser', 'o')
-            ->addSelect('s', 'o');
+            ->addSelect('s', 'o')
+            ->andWhere('e.state NOT IN (:states)')
+            ->setParameter('states', [State::CREATED, State::ARCHIVED])
+            ->andWhere('e.private = :isPrivate')
+            ->setParameter('isPrivate', false);
 
         if (!empty($search)) {
             $qb->andWhere('(
-                e.title LIKE :search OR
-                e.eventDescription LIKE :search OR
-                o.username LIKE :search OR
-                o.firstname LIKE :search OR
-                o.lastname LIKE :search OR
-                s.name LIKE :search
-            )')
+            e.title LIKE :search OR
+            e.eventDescription LIKE :search OR
+            o.username LIKE :search OR
+            o.firstname LIKE :search OR
+            o.lastname LIKE :search OR
+            s.name LIKE :search
+        )')
                 ->setParameter('search', '%' . $search . '%');
         }
 
@@ -105,17 +109,21 @@ class EventRepository extends ServiceEntityRepository
         $countQb = $this->createQueryBuilder('e')
             ->select('COUNT(DISTINCT e.id)')
             ->join('e.site', 's')
-            ->join('e.organiser', 'o');
+            ->join('e.organiser', 'o')
+            ->andWhere('e.state NOT IN (:states)')
+            ->setParameter('states', [State::CREATED, State::ARCHIVED])
+            ->andWhere('e.private = :isPrivate')
+            ->setParameter('isPrivate', false);
 
         if (!empty($search)) {
             $countQb->andWhere('(
-                e.title LIKE :search OR
-                e.eventDescription LIKE :search OR
-                o.username LIKE :search OR
-                o.firstname LIKE :search OR
-                o.lastname LIKE :search OR
-                s.name LIKE :search
-            )')
+            e.title LIKE :search OR
+            e.eventDescription LIKE :search OR
+            o.username LIKE :search OR
+            o.firstname LIKE :search OR
+            o.lastname LIKE :search OR
+            s.name LIKE :search
+        )')
                 ->setParameter('search', '%' . $search . '%');
         }
 
@@ -201,6 +209,18 @@ class EventRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('e')
             ->where('e.state IN (:state)')
             ->setParameter('state', [State::PAST])
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findAvailable()
+    {
+
+        return $this->createQueryBuilder('e')
+            ->where('e.state NOT IN  (:states)')
+            ->setParameter('states', [State::CREATED, State::ARCHIVED])
+            ->where('e.private = :isPrivate')
+            ->setParameter('isPrivate', false)
             ->getQuery()
             ->getResult();
     }

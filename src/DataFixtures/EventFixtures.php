@@ -96,6 +96,10 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
                 rand(2, 8)
             );
 
+            $event->setPrivate(
+                $faker->boolean(50)
+            );
+
             foreach ($randomParticipants as $participant) {
                 $event->addParticipant($participant);
             }
