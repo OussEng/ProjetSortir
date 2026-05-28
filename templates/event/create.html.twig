@@ -37,6 +37,7 @@
 
                     </div>
 
+
                     <div class="card-body p-4 p-md-5 bg-light">
 
                         {{ form_start(eventForm) }}
@@ -46,6 +47,7 @@
                             {{ form_widget(eventForm) }}
 
                         </div>
+
 
                         <div class="d-flex gap-2 mb-3">
 
@@ -71,12 +73,21 @@
 
                             <button class="btn btn-primary btn-lg rounded-3 fw-semibold shadow-sm">
 
+
+                        <div class="d-grid mb-2">
+                            <button type="submit" name="action" value="publish" class="btn btn-primary btn-lg rounded-3 fw-semibold shadow-sm">
+
                                 <i class="fas fa-plus-circle me-2"></i>
-                                Créer la sortie
-
+                                Publier
                             </button>
+                        </div>
 
 
+                        <div class="d-grid">
+                            <button type="submit" name="action" value="save" class="btn btn-secondary btn-lg rounded-3 fw-semibold shadow-sm">
+                                <i class="fas fa-save me-2"></i>
+                                Enregistrer
+                            </button>
 
                         </div>
 
@@ -98,9 +109,9 @@
 
             let today = new Date().toISOString().split('T')[0] + "T00:00";
 
-            let dateHeureDebut = document.getElementById('event_dateTimeStart');
+            let dateHeureDebut = document.getElementById('update_event_dateTimeStart');
 
-            let dateLimiteInscription = document.getElementById('event_dateLimitRegistration');
+            let dateLimiteInscription = document.getElementById('update_event_dateLimitRegistration');
 
             if (dateHeureDebut && dateLimiteInscription) {
 

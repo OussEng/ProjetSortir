@@ -2,7 +2,7 @@
 
     <div class="container-fluid px-3 px-lg-4">
 
-        <a class="navbar-brand fw-semibold d-flex align-items-center gap-2"
+        <a class="navbar-brand fw-semibold d-flex align-items-center"
            href="{{ path('app_home') }}">
             <i class="ti ti-calendar-event fs-5 text-primary"></i>
             Sortir<span class="text-primary">.com</span>
@@ -44,9 +44,29 @@
                 </li>
 
                 <li class="nav-item">
+
                     <a class="nav-link{{ app.request.attributes.get('_route') == 'app_city_list' ? ' active' }}"
                        href="{{ path('app_city_list') }}">
                         <i class="ti ti-map-2 me-1"></i>Villes
+
+                    <a class="nav-link{{ app.request.attributes.get('_route') == 'app_create' ? ' active' }}"
+                       href="{{ path('app_create') }}">
+                        <i class="ti ti-map-2 me-1"></i>Créer une sortie
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link{{ app.request.attributes.get('_route') == 'app_location_create' ? ' active' }}"
+                       href="{{ path('app_location_create') }}">
+                        <i class="ti ti-map-2 me-1"></i>Ajouter un lieu
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link{{ app.request.attributes.get('_route') == 'app_groupe_liste' ? ' active' }}"
+                       href="{{ path('app_groupe_liste') }}">
+                        <i class="ti ti-map-2 me-1"></i>Liste des groupes
+
                     </a>
                 </li>
 

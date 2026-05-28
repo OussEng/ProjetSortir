@@ -11,12 +11,14 @@
                class="btn btn-outline-primary px-4 py-2 rounded-pill fw-semibold">
                 ← Retour
             </a>
+            {% if event.organiser == app.user and event.isCreated() %}
+                <a href="{{ path('app_event_update', {'id': event.id }) }}"
+                   class="btn btn-warning px-4 py-2 rounded-pill fw-semibold">
+                    <i class="fas fa-pen me-1"></i>
+                    Modifier
+                </a>
+            {% endif %}
 
-            <a href="{{ path('app_event_update', {'id': event.id }) }}"
-               class="btn btn-warning px-4 py-2 rounded-pill fw-semibold">
-                <i class="fas fa-pen me-1"></i>
-                Modifier
-            </a>
         </div>
 
         <div class="position-relative mb-4">
@@ -131,6 +133,13 @@
                                 <div class="alert alert-warning text-center mb-0" role="alert">
                                     <i class="fas fa-exclamation-triangle me-2"></i> Cette sortie a été annulée.
                                 </div>
+                            {% endif %}
+
+                            {% if event.isCreated() and event.organiser == app.user %}
+                                <a href="{{ path('app_publish', {'id': event.id}) }}"
+                                   class="btn btn-success btn-sm rounded-3 fw-semibold py-2 w-100 text-center">
+                                    Publiée
+                                </a>
                             {% endif %}
 
                         </div>
